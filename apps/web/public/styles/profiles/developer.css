@@ -78,11 +78,11 @@
 
 /* Frosted glass when away from hero (wired by JS via .frosted) */
 .developer-navbar.frosted {
-    background-color: rgba(0, 0, 0, 0.45) !important;
-    backdrop-filter: blur(18px) saturate(140%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(4px) saturate(105%) !important;
+    -webkit-backdrop-filter: blur(4px) saturate(105%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .developer-navbar .logo,

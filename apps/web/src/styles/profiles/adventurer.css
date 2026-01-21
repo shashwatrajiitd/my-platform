@@ -7,6 +7,54 @@
     display: none !important;
 }
 
+/* Mobile dropdown menu with frosted glass */
+.mobile-nav-dropdown {
+    position: fixed;
+    top: 56px;
+    right: 1rem;
+    min-width: 200px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    z-index: 1002;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mobile-nav-item {
+    color: var(--netflix-white);
+    text-decoration: none;
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: block;
+}
+
+.mobile-nav-item:last-child {
+    border-bottom: none;
+}
+
+.mobile-nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
 /* Brighten all white text - override CSS variable */
 #adventurer-page {
     --netflix-white: #FFFFFF;
@@ -78,11 +126,11 @@
 
 /* Frosted glass when away from hero (wired by JS via .frosted) */
 .adventurer-navbar.frosted {
-    background-color: rgba(0, 0, 0, 0.45) !important;
-    backdrop-filter: blur(18px) saturate(140%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    background-color: rgba(18, 18, 18, 0.75) !important;
+    backdrop-filter: blur(22px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
 .adventurer-navbar .logo,
@@ -1271,6 +1319,45 @@ button.btn-primary-cta {
     }
 }
 
+/* Show hamburger menu when nav items are too close (around 1024px) */
+@media screen and (max-width: 1024px) {
+    .adventurer-navbar .nav-links {
+        display: none;
+    }
+    
+    #adventurer-page .mobile-menu-toggle {
+        display: flex !important;
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        padding: 0;
+        background: rgba(40, 40, 40, 0.8);
+        border: none;
+        border-radius: 6px;
+        color: var(--netflix-white);
+        cursor: pointer;
+        z-index: 1001;
+        transition: background-color 0.2s ease;
+    }
+    
+    .mobile-menu-toggle:hover {
+        background: rgba(60, 60, 60, 0.9);
+    }
+    
+    .mobile-menu-toggle i {
+        font-size: 1.2rem;
+    }
+    
+    .mobile-nav-dropdown {
+        top: 56px;
+        right: 1rem;
+    }
+}
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .instagram-main {
@@ -1314,7 +1401,7 @@ button.btn-primary-cta {
         object-fit: contain;
     }
     
-    .mobile-menu-toggle {
+    #adventurer-page .mobile-menu-toggle {
         flex-shrink: 0;
         width: 32px;
         height: 32px;
@@ -1337,21 +1424,6 @@ button.btn-primary-cta {
     
     .adventurer-navbar .nav-links {
         display: none;
-    }
-
-    /* Mobile menu open state */
-    #adventurer-navbar.nav-open .nav-links {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.95);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        z-index: 1002;
     }
     
     .navbar-right {
@@ -1390,7 +1462,7 @@ button.btn-primary-cta {
         max-width: 100%;
     }
     
-    .mobile-menu-toggle {
+    #adventurer-page .mobile-menu-toggle {
         width: 28px;
         height: 28px;
         margin-left: 0.25rem;

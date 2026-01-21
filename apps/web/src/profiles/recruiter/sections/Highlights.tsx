@@ -1,44 +1,46 @@
 'use client'
 
-export function RecruiterHighlights() {
-  const highlights = [
-    {
-      icon: 'fa-rocket',
-      title: 'Production AI Systems',
-      description: 'Architecting and deploying multi-agent GenAI pipelines at scale for 11+ app surfaces',
-    },
-    {
-      icon: 'fa-chart-line',
-      title: 'Revenue Impact',
-      description: 'Built anomaly detection systems at Samsung R&D that improved revenue forecasting accuracy',
-    },
-    {
-      icon: 'fa-graduation-cap',
-      title: 'IIT Delhi',
-      description: 'B.Tech Mathematics & Computing from one of India\'s premier technical institutes',
-    },
-    {
-      icon: 'fa-trophy',
-      title: 'Top Achiever',
-      description: 'JEE Advanced 99.89 percentile, NTSE Scholar, Samsung SWC Advanced Certification',
-    },
-  ]
+import { ContinueWatchingPreview } from '@/components/netflix/ContinueWatchingPreview'
 
+export function RecruiterHighlights() {
   return (
-    <section className="recruiter-section highlights-section">
-      <h2 className="section-title">Key Highlights</h2>
-      <div className="section-divider"></div>
-      <div className="highlights-grid">
-        {highlights.map((highlight, index) => (
-          <div key={index} className="highlight-card">
-            <div className="highlight-icon">
-              <i className={`fas ${highlight.icon}`}></i>
-            </div>
-            <h3 className="highlight-title">{highlight.title}</h3>
-            <p className="highlight-description">{highlight.description}</p>
-          </div>
-        ))}
-      </div>
-    </section>
+    <ContinueWatchingPreview
+      title="Today's Top Picks for You"
+      titleId="recruiter-top-picks-title"
+      sectionClassName="highlights-section"
+      showExpandButton={false}
+      showHoverScrollArrows
+      showDivider
+      items={[
+        {
+          id: 'ai-systems',
+          title: 'Production AI Systems',
+          targetId: 'recruiter-top-picks-ai-systems',
+          previewSrc: '/assets/profiles/Recruiter/top_picks/AI_systems.mp4',
+          description: 'Architecting and deploying multi-agent GenAI System at scale for 8+ app surfaces (widgets, tiles, banners, category and theme-based recommendations etc)',
+        },
+        {
+          id: 'revenue-impact',
+          title: 'Production Impact',
+          targetId: 'recruiter-top-picks-revenue',
+          previewSrc: '/assets/profiles/Recruiter/top_picks/Revenue.mp4',
+          description: 'Developed Autonomous Creative Generation System for Performance Marketing with 15x volume of assert creation and 95% cost reduction at scale',
+        },
+        {
+          id: 'iit-delhi',
+          title: 'IIT Delhi',
+          targetId: 'recruiter-top-picks-iit-delhi',
+          previewSrc: '/assets/profiles/Recruiter/top_picks/IITDelhi.mp4',
+          description: "Completed B.Tech. in Mathematics & Computing from IIT Delhi - Country's one of the  most prestigious technical institute",
+        },
+        {
+          id: 'top-achiever',
+          title: 'Top Achiever',
+          targetId: 'recruiter-top-picks-top-achiever',
+          previewSrc: '/assets/profiles/Recruiter/top_picks/top_achiever.mp4',
+          description: 'Ranked in top 0.2% nationwide with 99.89 percentile in JEE Advanced & Mains, NTSE Scholar, Samsung SWC Advanced Certification',
+        },
+      ]}
+    />
   )
 }

@@ -2,16 +2,22 @@
 
 export function RecruiterContact() {
   return (
-    <section id="recruiter-contact" className="recruiter-section contact-section-recruiter">
-      <h2 className="section-title">Let's Connect</h2>
+    <section id="recruiter-contact" className="recruiter-section recruiter-contact-section">
+      <h2 className="section-title">Hire me</h2>
       <div className="section-divider"></div>
-      <div className="contact-content-recruiter">
-        <p className="contact-subtitle-recruiter">
-          Open to full-time opportunities in AI/ML Engineering, GenAI Systems, and MLOps roles.
-        </p>
-        <div className="contact-cta-buttons-recruiter">
+      <div className="contact-content">
+        <p className="contact-subtitle">Building AI Systems at Scale? Let’s Connect.</p>
+        <div className="contact-cta-buttons">
           <button
             className="btn btn-primary-cta"
+            onClick={() => {
+              window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Interview+with+Shashwat+Raj&add=shashwatrajiitd@gmail.com', '_blank')
+            }}
+          >
+            <i className="fas fa-calendar-check"></i> Schedule Interview
+          </button>
+          <button
+            className="btn btn-secondary-cta"
             onClick={() => {
               const link = document.createElement('a')
               link.href = '/assets/resume/shashwat_resume.pdf'
@@ -19,33 +25,27 @@ export function RecruiterContact() {
               link.click()
             }}
           >
-            <i className="fas fa-download"></i> Download Resume
+            <i className="fas fa-file-pdf"></i> Download Resume
           </button>
-          <button
-            className="btn btn-secondary-cta"
-            onClick={() => window.open('mailto:shashwatrajiitd@gmail.com?subject=Interview Opportunity', '_blank')}
+          <a
+            href="mailto:shashwatrajiitd@gmail.com"
+            className="btn btn-info-cta"
           >
             <i className="fas fa-envelope"></i> Email Me
-          </button>
-          <button
-            className="btn btn-secondary-cta"
-            onClick={() => window.open('https://www.linkedin.com/in/shashwatrajiitd/', '_blank')}
-          >
-            <i className="fab fa-linkedin"></i> LinkedIn
-          </button>
+          </a>
         </div>
-        <div className="contact-info-recruiter">
-          <div className="contact-item-recruiter">
+        <div className="contact-info">
+          <div className="contact-item">
             <i className="fas fa-envelope"></i>
             <span>shashwatrajiitd@gmail.com</span>
           </div>
-          <div className="contact-item-recruiter">
+          <div className="contact-item">
             <i className="fas fa-map-marker-alt"></i>
-            <span>Mumbai, India | Open to Relocate</span>
+            <span>Mumbai, Maharashtra</span>
           </div>
-          <div className="contact-item-recruiter">
-            <i className="fas fa-calendar-check"></i>
-            <span>Available for interviews immediately</span>
+          <div className="contact-item">
+            <i className="fab fa-linkedin"></i>
+            <span>shashwatrajiitd</span>
           </div>
         </div>
       </div>

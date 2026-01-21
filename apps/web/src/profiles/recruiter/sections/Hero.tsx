@@ -45,6 +45,13 @@ export function RecruiterHero() {
     initializeVideoCarousel()
   }, [])
 
+  const scrollToContact = () => {
+    const el = document.getElementById('recruiter-contact')
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    window.scrollBy({ top: -80, left: 0 })
+  }
+
   return (
     <section className="recruiter-hero" id="recruiter-hero">
       <div className="hero-background">
@@ -52,24 +59,20 @@ export function RecruiterHero() {
         <div className="hero-overlay"></div>
       </div>
       <div className="recruiter-hero-content">
-        <div className="hero-badge">Available for Opportunities</div>
         <h1 className="recruiter-hero-title">Shashwat Raj</h1>
         <p className="recruiter-hero-subtitle">
-          AI Engineer | IIT Delhi | Building Scalable AI Systems
+          Applied AI Engineer | IIT Delhi | Building Scalable AI Systems
         </p>
-        <div className="hero-stats">
-          <div className="stat-card">
-            <div className="stat-value">3+</div>
-            <div className="stat-label">Years Experience</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">10+</div>
-            <div className="stat-label">Projects</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value">5+</div>
-            <div className="stat-label">Technologies</div>
-          </div>
+        <div className="hero-tags" aria-label="Quick stats">
+          <span className="hero-tag">
+            <strong></strong> Autonomous AI Systems
+          </span>
+          <span className="hero-tag">
+            <strong></strong> Multi-Agent Orchestration
+          </span>
+          <span className="hero-tag">
+            <strong></strong> Scalable AI Platforms
+          </span>
         </div>
         <div className="hero-cta-buttons">
           <button
@@ -90,6 +93,20 @@ export function RecruiterHero() {
             <i className="fas fa-envelope"></i> Schedule Interview
           </button>
         </div>
+        <a
+          className="hero-badge hero-badge--shimmer"
+          href="#recruiter-contact"
+          onClick={(e) => {
+            e.preventDefault()
+            scrollToContact()
+          }}
+          aria-label="Available for opportunities. Click to jump to contact section."
+        >
+          <span className="hero-badge-text">Available for Opportunities - Hire Me</span>
+          <span className="hero-badge-chevron" aria-hidden="true">
+            ›
+          </span>
+        </a>
       </div>
     </section>
   )

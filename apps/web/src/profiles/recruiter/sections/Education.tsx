@@ -1,30 +1,43 @@
 'use client'
 
 export function RecruiterEducation() {
+  const education = [
+    {
+      degree: "B.Tech. in Mathematics & Computing",
+      institution: "Indian Institute of Technology, Delhi",
+      date: "Oct 2021 - May 2025",
+      grade: "Grade: 70%",
+    },
+    {
+      degree: "High School (12th Grade)",
+      institution: "Stephens International Public School",
+      date: "March 2019 - May 2021",
+      grade: "Grade: 95%",
+    },
+  ]
+
   return (
-    <section id="recruiter-education" className="recruiter-section education-section">
+    <section id="recruiter-education" className="recruiter-section">
       <h2 className="section-title">Education</h2>
       <div className="section-divider"></div>
-      <div className="education-card-recruiter">
-        <div className="education-header-recruiter">
-          <div>
-            <h3 className="education-degree-recruiter">B.Tech Mathematics & Computing</h3>
-            <div className="education-institution-recruiter">Indian Institute of Technology Delhi</div>
+      <div className="education-container">
+        {education.map((edu, index) => (
+          <div key={index}>
+            <div className="education-card">
+              <div className="education-header">
+                <h3 className="education-degree">{edu.degree}</h3>
+                <h4 className="education-institution">{edu.institution}</h4>
+              </div>
+              <div className="education-meta">
+                <span className="education-date">
+                  <i className="far fa-calendar"></i> {edu.date}
+                </span>
+                <span className="education-grade">{edu.grade}</span>
+              </div>
+            </div>
+            {index < education.length - 1 && <div className="education-divider"></div>}
           </div>
-          <div className="education-meta-recruiter">
-            <div className="education-date">Oct 2021 - May 2025</div>
-            <div className="education-grade">CGPA: 7.0 / 10</div>
-          </div>
-        </div>
-        <div className="education-highlights">
-          <p>Pursuing degree from one of India's premier technical institutes with focus on:</p>
-          <ul>
-            <li>Machine Learning & Artificial Intelligence</li>
-            <li>Data Structures & Algorithms</li>
-            <li>Distributed Systems & Cloud Computing</li>
-            <li>Mathematical Modeling & Optimization</li>
-          </ul>
-        </div>
+        ))}
       </div>
     </section>
   )

@@ -1,14 +1,32 @@
 'use client'
 
+import type { MouseEvent } from 'react'
+
 interface ContinueWatchingItem {
   label: string
   targetId: string
-  iconClass: string
-  gradient: string
+  iconClass?: string
+  gradient?: string
+  videoSrc?: string
 }
 
 export function ContinueWatching(props: { title: string; items: ContinueWatchingItem[] }) {
   const { title, items } = props
+
+  const handleVideoStart = (event: MouseEvent<HTMLDivElement>) => {
+    const video = event.currentTarget.querySelector('video')
+    if (!video) return
+    video.play().catch(() => {
+      // Ignore autoplay failures for hover interactions.
+    })
+  }
+
+  const handleVideoStop = (event: MouseEvent<HTMLDivElement>) => {
+    const video = event.currentTarget.querySelector('video')
+    if (!video) return
+    video.pause()
+    video.currentTime = 0
+  }
 
   const goTo = (targetId: string) => {
     try {
@@ -35,6 +53,8 @@ export function ContinueWatching(props: { title: string; items: ContinueWatching
             role="button"
             tabIndex={0}
             onClick={() => goTo(item.targetId)}
+            onMouseEnter={item.videoSrc ? handleVideoStart : undefined}
+            onMouseLeave={item.videoSrc ? handleVideoStop : undefined}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
@@ -42,8 +62,27 @@ export function ContinueWatching(props: { title: string; items: ContinueWatching
               }
             }}
           >
-            <div className="card-image" style={{ background: `linear-gradient(${item.gradient})` }}>
-              <i className={item.iconClass}></i>
+            <div
+              className="card-image"
+              style={item.gradient ? { background: `linear-gradient(${item.gradient})` } : undefined}
+            >
+              {item.videoSrc ? (
+                <video
+                  className="card-video"
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  src={item.videoSrc}
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  onLoadedData={(event) => {
+                    event.currentTarget.currentTime = 0
+                  }}
+                />
+              ) : item.iconClass ? (
+                <i className={item.iconClass}></i>
+              ) : null}
             </div>
             <div className="card-label">{item.label}</div>
           </div>

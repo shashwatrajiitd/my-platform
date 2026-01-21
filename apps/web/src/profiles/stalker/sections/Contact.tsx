@@ -3,14 +3,16 @@
 export function StalkerContact() {
   return (
     <section id="stalker-contact" className="stalker-section stalker-contact-section">
-      <h2 className="section-title">Hire me</h2>
+      <h2 className="section-title">HIRE ME</h2>
       <div className="section-divider"></div>
       <div className="contact-content">
         <p className="contact-subtitle">Ready to build something amazing together?</p>
         <div className="contact-cta-buttons">
           <button
             className="btn btn-primary-cta"
-            onClick={() => window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Interview+with+Shashwat+Raj&add=shashwatrajiitd@gmail.com', '_blank')}
+            onClick={() => {
+              window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=Interview+with+Shashwat+Raj&add=shashwatrajiitd@gmail.com', '_blank')
+            }}
           >
             <i className="fas fa-calendar-check"></i> Schedule Interview
           </button>
@@ -25,7 +27,10 @@ export function StalkerContact() {
           >
             <i className="fas fa-file-pdf"></i> Download Resume
           </button>
-          <a className="btn btn-info-cta" href="mailto:shashwatrajiitd@gmail.com">
+          <a
+            href="mailto:shashwatrajiitd@gmail.com"
+            className="btn btn-info-cta"
+          >
             <i className="fas fa-envelope"></i> Email Me
           </a>
         </div>
@@ -36,7 +41,7 @@ export function StalkerContact() {
           </div>
           <div className="contact-item">
             <i className="fas fa-map-marker-alt"></i>
-            <span>Mumbai, India</span>
+            <span>Mumbai, Maharashtra</span>
           </div>
           <div className="contact-item">
             <i className="fab fa-linkedin"></i>
@@ -47,4 +52,3 @@ export function StalkerContact() {
     </section>
   )
 }
-

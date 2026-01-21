@@ -1,41 +1,151 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
+
+interface AchievementCard {
+  skill: string
+  icon: string
+  label: string
+  gradient: string
+  tags: string[]
+  lines: string[]
+}
+
 export function RecruiterAchievements() {
-  const achievements = [
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  const achievements: AchievementCard[] = [
     {
-      title: 'JEE Advanced & Mains 2021',
-      description: '99.89 percentile - Top 0.11% of candidates',
-      year: '2021',
+      skill: 'JEE Advanced & Mains 2021',
+      icon: 'fas fa-trophy',
+      label: 'JEE Advanced & Mains 2021',
+      gradient: '135deg, #667eea 0%, #764ba2 100%',
+      tags: ['Academic Excellence', 'Competitive Exam'],
+      lines: ['Secured 99.89 percentile nationwide among 1M+ candidates'],
     },
     {
-      title: 'NTSE Scholar 2019',
-      description: 'National Talent Search Examination - Merit Certificate',
-      year: '2019',
+      skill: 'NTSE Scholar 2019',
+      icon: 'fas fa-star',
+      label: 'NTSE Scholar 2019',
+      gradient: '135deg, #f093fb 0%, #f5576c 100%',
+      tags: ['National Recognition', 'Scholarship'],
+      lines: ['Awarded National Talent Scholarship among 1M+ students'],
     },
     {
-      title: 'Samsung SWC',
-      description: 'Advanced Software Competency Certification (1st attempt)',
-      year: '2024',
+      skill: 'Samsung SWC Test',
+      icon: 'fas fa-shield-alt',
+      label: 'Samsung SWC Test',
+      gradient: '135deg, #4facfe 0%, #00f2fe 100%',
+      tags: ['Technical Competency', 'Industry Recognition'],
+      lines: ["Qualified Samsung's Advanced Software Competency Test on first attempt"],
     },
     {
-      title: 'Regional Mathematical Olympiad',
-      description: 'Merit Certificate × 2',
-      year: '2018-2019',
+      skill: 'Regional Mathematical Olympiad',
+      icon: 'fas fa-medal',
+      label: 'Regional Mathematical Olympiad',
+      gradient: '135deg, #fa709a 0%, #fee140 100%',
+      tags: ['Mathematical Excellence', 'Olympiad'],
+      lines: ['Received certificate of merit twice for mathematical excellence'],
     },
   ]
 
+  const handleCardClick = (achievementId: string) => {
+    if (expandedCard === achievementId) {
+      setExpandedCard(null)
+    } else {
+      setExpandedCard(achievementId)
+      
+      const card = cardRefs.current.get(achievementId)
+      if (card) {
+        const row = card.closest('.skills-cards')
+        if (row) {
+          const cards = Array.from(row.querySelectorAll('.skill-card'))
+          const index = cards.indexOf(card)
+          const total = cards.length
+          const cardRect = card.getBoundingClientRect()
+          const cardWidth = cardRect.width
+          const expandedWidth = Math.round(cardWidth * 1.35)
+          const expansionOffset = (expandedWidth - cardWidth) / 2
+          
+          let leftOffset = 0
+          if (index === 0) {
+            leftOffset = 0
+          } else if (index === total - 1) {
+            leftOffset = -expansionOffset * 2
+          } else {
+            leftOffset = -expansionOffset
+          }
+          
+          card.style.setProperty('--expansion-left', `${leftOffset}px`)
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (expandedCard) {
+        const card = cardRefs.current.get(expandedCard)
+        if (card && !card.contains(e.target as Node)) {
+          setExpandedCard(null)
+        }
+      }
+    }
+    
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [expandedCard])
+
   return (
-    <section id="recruiter-achievements" className="recruiter-section achievements-section">
-      <h2 className="section-title">Achievements & Certifications</h2>
+    <section id="recruiter-achievements" className="core-skills-section">
+      <h2 className="section-title">Achievements</h2>
       <div className="section-divider"></div>
-      <div className="achievements-grid-recruiter">
-        {achievements.map((achievement, index) => (
-          <div key={index} className="achievement-card-recruiter">
-            <div className="achievement-year">{achievement.year}</div>
-            <h3 className="achievement-title-recruiter">{achievement.title}</h3>
-            <p className="achievement-description-recruiter">{achievement.description}</p>
-          </div>
-        ))}
+      <div className="skills-cards">
+        {achievements.map((achievement, index) => {
+          const achievementId = `achievement-${index}`
+          const isExpanded = expandedCard === achievementId
+          
+          return (
+            <div
+              key={index}
+              ref={(el) => {
+                if (el) cardRefs.current.set(achievementId, el)
+              }}
+              className={`skill-card primary ${isExpanded ? 'expanded' : ''}`}
+              onClick={() => handleCardClick(achievementId)}
+            >
+              <div
+                className="card-image"
+                style={{ background: `linear-gradient(${achievement.gradient})` }}
+              >
+                <i className={achievement.icon}></i>
+              </div>
+              <div className="card-label">{achievement.label}</div>
+              <div className="skill-expanded">
+                <div
+                  className="expanded-image"
+                  style={{ background: `linear-gradient(${achievement.gradient})` }}
+                >
+                  <div className="expanded-overlay"></div>
+                </div>
+                <div className="expanded-content">
+                  <h3 className="expanded-title">{achievement.skill}</h3>
+                  <div className="expanded-tags">
+                    {achievement.tags.map((tag, tagIndex) => (
+                      <span key={tagIndex} className="expanded-tag">{tag}</span>
+                    ))}
+                  </div>
+                  <div className="expanded-lines">
+                    {achievement.lines.map((line, lineIndex) => (
+                      <p key={lineIndex} className="expanded-line">{line}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </section>
   )
