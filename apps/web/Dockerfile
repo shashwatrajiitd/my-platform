@@ -20,6 +20,13 @@ COPY --from=deps /app/node_modules ./node_modules
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
+# NPM workspaces requires the root workspace manifests in this stage.
+COPY package.json package-lock.json turbo.json ./
+COPY apps/web/package.json apps/web/package.json
+COPY packages/types/package.json packages/types/package.json
+COPY packages/ui/package.json packages/ui/package.json
+COPY packages/utils/package.json packages/utils/package.json
+
 # Copy source
 COPY apps/web ./apps/web
 COPY packages ./packages
@@ -37,6 +44,13 @@ ENV HOSTNAME=0.0.0.0
 # Keep it available for any server-side usage too.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+# NPM workspaces requires the root workspace manifests in this stage too.
+COPY package.json package-lock.json turbo.json ./
+COPY apps/web/package.json apps/web/package.json
+COPY packages/types/package.json packages/types/package.json
+COPY packages/ui/package.json packages/ui/package.json
+COPY packages/utils/package.json packages/utils/package.json
 
 # Copy what Next needs at runtime
 COPY --from=build /app/apps/web/.next ./apps/web/.next
