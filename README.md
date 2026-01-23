@@ -1,87 +1,81 @@
-# Portfolio Netflix - Production-Grade Monorepo
+# Portfolio Netflix (Monorepo)
 
-A production-grade portfolio application with Netflix-style UI, built as a scalable monorepo architecture.
+A Netflix-style, profile-driven portfolio with a **streaming RAG assistant**, a **browser-based Python IDE + streaming terminal**, and a **security-first code execution backend**.
 
-## Architecture
+## What’s inside
+
+- **Profiles**: `developer`, `recruiter`, `stalker`, `adventurer` — redesigned layouts + richer content.
+- **Python IDE + Terminal**: Monaco editor + terminal UI that streams stdout/stderr over **SSE**.
+- **RAG Assistant (SSE)**: Profile-aware, grounded answers backed by **ChromaDB** + **Gemini** (embeddings + generation).
+- **Drag interactions**: Netflix carousel supports **drag-to-scroll** via a custom draggable scrollbar.
+
+## Architecture (high level)
+
+```mermaid
+flowchart LR
+  U[User Browser] -->|Next.js App Router| W[apps/web]
+  W -->|SSE: /api/rag/chat| API[apps/api (FastAPI)]
+  W -->|SSE: /api/code/run/stream| API
+  API -->|retrieve| VS[(ChromaDB\n(per-profile collections))]
+  API -->|stream tokens| LLM[Gemini LLM]
+  API -->|embed| EMB[Gemini Embeddings]
+  API -->|execute code| EXE[Executor\nlocal or docker]
+```
+
+## Repo layout
 
 ```
-portfolio/
+portfolio-netflix/
 ├── apps/
 │   ├── web/          # Next.js frontend (App Router + TypeScript)
-│   └── api/          # FastAPI backend
+│   └── api/          # FastAPI backend (RAG + Code Runner)
 ├── packages/
-│   ├── ui/           # Shared design system components
-│   ├── types/        # Shared TypeScript types
+│   ├── ui/           # Shared UI components
+│   ├── types/        # Shared TS types
 │   └── utils/        # Shared utilities
-└── infra/            # Infrastructure configs (Docker, nginx)
+├── infra/            # Docker / nginx + code-runner image
+└── docs/             # System design + diagrams
 ```
 
-## Getting Started
+## Quick start (dev)
 
 ### Prerequisites
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-- Python >= 3.10 (for backend)
+- Node.js **18+**
+- npm **9+**
+- Python **3.10+**
+- Optional: Docker (only required for `CODE_EXECUTOR_MODE=docker`)
 
-### Installation
+### Install & run
 
 ```bash
-# Install dependencies
 npm install
-
-# Start development servers
 npm run dev
 ```
 
-This will start:
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8000
+- **Web**: `http://localhost:3000`
+- **API**: `http://localhost:8000` (see `apps/api`)
 
-## Development
+## Configuration
 
-### Frontend (Next.js)
+### Backend env vars (RAG + executor)
 
-```bash
-cd apps/web
-npm run dev
-```
-
-### Backend (FastAPI)
+Create `apps/api/.env`:
 
 ```bash
-cd apps/api
-python -m uvicorn src.main:app --reload
+GOOGLE_API_KEY=...            # required for embeddings + LLM
+CHROMA_PERSIST_DIR=./chroma   # persisted vector DB dir (local)
+CODE_EXECUTOR_MODE=local      # local | docker
+CODE_RUNNER_DOCKER_IMAGE=code-runner:latest
 ```
 
-## Building
+## Documentation
 
-```bash
-# Build all packages and apps
-npm run build
-```
-
-## Project Structure
-
-### Frontend (`apps/web`)
-
-- **Profile-based architecture**: Each profile (Developer, Recruiter, Stalker, Adventurer) is isolated in its own domain
-- **Feature-based organization**: Features like AI chat, code runner are modular
-- **Shared components**: Netflix-style UI components in `packages/ui`
-
-### Backend (`apps/api`)
-
-- **RAG module**: TODO - RAG-based AI chat assistant
-- **Code runner**: TODO - Python code execution sandbox
-- **Profile API**: Profile-specific data endpoints
-
-## TODO: Backend Integration
-
-- [ ] RAG pipeline setup with vector database
-- [ ] Python sandbox execution environment
-- [ ] Profile-specific data API endpoints
-- [ ] Authentication and rate limiting
+- **Architecture & system design**: `docs/ARCHITECTURE.md`
+- **RAG design + data flow**: `docs/RAG.md`
+- **Python runner (security + SSE protocol)**: `docs/CODE_RUNNER.md`
+- **Frontend structure (profiles, IDE, drag UI)**: `docs/FRONTEND.md`
 
 ## License
 
-Private - All rights reserved
+Private — all rights reserved.
