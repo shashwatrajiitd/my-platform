@@ -9,8 +9,6 @@ from __future__ import annotations
 import os
 from typing import Any, Dict, List, Optional
 
-import google.generativeai as genai
-
 MODEL = "gemini-3-flash-preview"
 
 
@@ -43,6 +41,15 @@ def generate(messages: List[Dict[str, Any]], model_name: str = MODEL) -> str:
 
     Requires `GOOGLE_API_KEY` in environment (or any mechanism supported by google-generativeai).
     """
+    try:
+        import google.generativeai as genai  # type: ignore
+    except Exception as e:
+        # Keep API import-time safe. If Gemini deps are broken/missing (e.g. grpc),
+        # fail only when the RAG path is invoked.
+        raise RuntimeError(
+            "Gemini SDK dependencies are not available. "
+            "Fix Python deps (google-generativeai / grpcio) to enable RAG."
+        ) from e
 
     api_key: Optional[str] = os.getenv("GOOGLE_API_KEY")
     if api_key:

@@ -22,7 +22,7 @@ export type RAGStreamEvent = {
 
 function getApiBaseUrl(): string {
   // Prefer configured API base URL, but allow same-origin deployments.
-  return process.env.NEXT_PUBLIC_API_URL || ''
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 }
 
 function joinUrl(base: string, path: string): string {

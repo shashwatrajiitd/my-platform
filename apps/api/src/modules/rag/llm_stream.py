@@ -9,8 +9,6 @@ from __future__ import annotations
 import os
 from typing import Any, Dict, Iterator, List, Optional
 
-import google.generativeai as genai
-
 from .llm import _extract_system_text, _to_gemini_contents
 
 MODEL = "gemini-3-flash-preview"
@@ -22,6 +20,13 @@ def generate_stream(messages: List[Dict[str, Any]]) -> Iterator[str]:
 
     Requires `GOOGLE_API_KEY` in environment (or any mechanism supported by google-generativeai).
     """
+    try:
+        import google.generativeai as genai  # type: ignore
+    except Exception as e:
+        raise RuntimeError(
+            "Gemini SDK dependencies are not available. "
+            "Fix Python deps (google-generativeai / grpcio) to enable streaming RAG."
+        ) from e
 
     api_key: Optional[str] = os.getenv("GOOGLE_API_KEY")
     if api_key:
