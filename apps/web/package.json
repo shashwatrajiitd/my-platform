@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "node -e \"const fs=require('fs'); const bad=fs.existsSync('.next') && !fs.existsSync('.next/server/middleware-manifest.json'); if(bad){console.log('[predev] Detected stale .next (missing middleware-manifest). Cleaning...'); fs.rmSync('.next',{recursive:true,force:true}); }\"",
     "dev": "next dev",
     "dev:turbo": "TURBOPACK=1 next dev --turbo",
     "build": "next build",

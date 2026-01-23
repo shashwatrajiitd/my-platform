@@ -19,6 +19,16 @@ function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
+function TypingIndicator() {
+  return (
+    <span className="recruiter-ai-typing" aria-label="Assistant is typing">
+      <span className="recruiter-ai-typing__dot" aria-hidden="true" />
+      <span className="recruiter-ai-typing__dot" aria-hidden="true" />
+      <span className="recruiter-ai-typing__dot" aria-hidden="true" />
+    </span>
+  )
+}
+
 function ChatBubbleContent({
   role,
   content,
@@ -28,7 +38,7 @@ function ChatBubbleContent({
   content: string
   isStreamingPlaceholder: boolean
 }) {
-  if (!content && isStreamingPlaceholder) return <span aria-hidden="true">…</span>
+  if (!content && isStreamingPlaceholder) return <TypingIndicator />
   if (!content) return null
 
   if (role === 'assistant') return <SafeMarkdown text={content} />

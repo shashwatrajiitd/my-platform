@@ -12,13 +12,50 @@ import threading
 import time
 from queue import Empty, Queue
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
+from .ingestion import ingest_from_json
 from .pipeline import run_rag_stream
 from .schemas import RAGChatRequest
+from .vectorstore import VALID_PROFILES, get_collection
 
 router = APIRouter(prefix="/api/rag", tags=["RAG"])
+
+
+@router.post("/ingest")
+async def rag_ingest(profile: str = "all", reset: bool = False):
+    """
+    Ingest bundled portfolio JSON data into Chroma.
+
+    - profile: one of {developer,recruiter,adventurer,stalker} or "all"
+    - reset: best-effort delete known ids before ingesting (idempotent-ish)
+    """
+
+    if not (os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")):
+        raise HTTPException(
+            status_code=400,
+            detail="Missing GOOGLE_API_KEY (or GEMINI_API_KEY). Needed to compute embeddings during ingest.",
+        )
+
+    profiles = list(VALID_PROFILES) if profile == "all" else [profile]
+    for p in profiles:
+        if p not in VALID_PROFILES:
+            raise HTTPException(status_code=400, detail=f"Invalid profile '{p}'.")
+
+    results: dict[str, int] = {}
+    for p in profiles:
+        chunks, _src = ingest_from_json(p, reset=reset)
+        results[p] = int(chunks)
+
+    counts: dict[str, int] = {}
+    for p in profiles:
+        try:
+            counts[p] = int(get_collection(p).count())
+        except Exception:
+            counts[p] = -1
+
+    return {"ingested_chunks": results, "collection_counts": counts}
 
 
 @router.post("/chat")
@@ -59,7 +96,7 @@ async def rag_chat(req: RAGChatRequest):
 
         threading.Thread(target=_runner, daemon=True).start()
 
-        first_chunk_deadline = time.monotonic() + 8.0
+        first_chunk_deadline = time.monotonic() + 20.0
         total_deadline = time.monotonic() + 45.0
         saw_any = False
 
@@ -79,7 +116,7 @@ async def rag_chat(req: RAGChatRequest):
                 if not saw_any and time.monotonic() > first_chunk_deadline:
                     yield _send(
                         {
-                            "token": "RAG is taking too long to respond. Check GOOGLE_API_KEY, internet access, and that the profile is ingested in Chroma.",
+                            "token": "RAG is taking too long to respond. Check your internet access, or Retry the query",
                             "done": True,
                         }
                     )

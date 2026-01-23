@@ -15,7 +15,17 @@ from .retriever import retrieve
 from .schemas import RAGSource, RAGStreamEvent
 
 
-NO_CONTEXT_FALLBACK = "I don’t have enough information to answer that."
+NO_CONTEXT_FALLBACK = """
+I don’t have enough information to answer that.
+
+If there's something else you would like to know about Professional Life of Shashwat, please ask.
+Else You can contact Shashwat at the following email or LinkedIn:
+
+Contact Information:
+Email: shashwatrajiitd@gmail.com
+LinkedIn: linkedin.com/in/shashwatrajiitd
+
+"""
 
 
 def run_rag(query: str, profile: str) -> str:
