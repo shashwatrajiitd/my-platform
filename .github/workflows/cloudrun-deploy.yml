@@ -1,0 +1,93 @@
+name: Deploy to Cloud Run (main)
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: cloudrun-deploy-main
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      REGION: ${{ secrets.GCP_REGION }}
+      AR_REPO: ${{ secrets.ARTIFACT_REGISTRY_REPO }}
+      WEB_SERVICE: ${{ secrets.CLOUD_RUN_WEB_SERVICE }}
+      API_SERVICE: ${{ secrets.CLOUD_RUN_API_SERVICE }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Recommended auth: Workload Identity Federation (no long-lived JSON key)
+      - name: Auth (Workload Identity Federation)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOYER_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure Docker auth for Artifact Registry
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+
+      - name: Build & push images
+        run: |
+          set -euo pipefail
+
+          WEB_IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/portfolio-web:${GITHUB_SHA}"
+          API_IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/portfolio-api:${GITHUB_SHA}"
+
+          echo "WEB_IMAGE=${WEB_IMAGE}" >> "$GITHUB_ENV"
+          echo "API_IMAGE=${API_IMAGE}" >> "$GITHUB_ENV"
+
+          # Web image must be built from repo root because the Dockerfile references workspace manifests.
+          docker build \
+            -f apps/web/Dockerfile \
+            -t "${WEB_IMAGE}" \
+            --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+            .
+          docker push "${WEB_IMAGE}"
+
+          # API image can be built with apps/api as context.
+          docker build \
+            -f apps/api/Dockerfile \
+            -t "${API_IMAGE}" \
+            apps/api
+          docker push "${API_IMAGE}"
+
+      - name: Deploy API
+        run: |
+          set -euo pipefail
+
+          gcloud run deploy "${API_SERVICE}" \
+            --image "${API_IMAGE}" \
+            --region "${REGION}" \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8000 \
+            --set-env-vars "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }},CHROMA_PERSIST_DIR=/app/chroma,CODE_EXECUTOR_MODE=local"
+
+      - name: Deploy Web
+        run: |
+          set -euo pipefail
+
+          gcloud run deploy "${WEB_SERVICE}" \
+            --image "${WEB_IMAGE}" \
+            --region "${REGION}" \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-env-vars "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}"
+

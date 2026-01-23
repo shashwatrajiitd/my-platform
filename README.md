@@ -76,6 +76,7 @@ CODE_RUNNER_DOCKER_IMAGE=code-runner:latest
 - **RAG design + data flow**: `docs/RAG.md`
 - **Python runner (security + SSE protocol)**: `docs/CODE_RUNNER.md`
 - **Frontend structure (profiles, IDE, drag UI)**: `docs/FRONTEND.md`
+- **Cloud Run continuous deployment (main)**: `docs/CLOUD_RUN_CD.md`
 
 ## License
 
