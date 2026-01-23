@@ -1,0 +1,7 @@
+cat > apps/api/.dockerignore <<'EOF'
+venv_api/
+chroma/
+**/__pycache__/
+**/*.pyc
+.env
+EOF
