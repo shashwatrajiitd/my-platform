@@ -12,11 +12,9 @@
     --netflix-white: #FFFFFF;
 }
 
-/* Add brightness glow to white text elements */
-#developer-page,
-#developer-page * {
-    color: inherit;
-}
+/* IMPORTANT:
+   Do NOT force `color: inherit` on `#developer-page *` because Monaco editor relies on
+   per-token span colors (e.g., `.mtk*`) for syntax highlighting. */
 
 /* Enhance white text brightness with glow */
 #developer-page .section-title,
@@ -712,6 +710,25 @@ button.btn-primary-cta {
     font-size: 0.9rem;
     font-weight: 600;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.code-editor-lang-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    object-fit: contain;
+}
+
+.code-editor-sep {
+    opacity: 0.9;
+}
+
+.code-editor-subtitle {
+    color: #6a9955; /* match Python comment green */
+    font-weight: 500;
 }
 
 .code-editor-controls {
@@ -766,12 +783,13 @@ button.btn-primary-cta {
 .code-content-wrapper {
     position: relative;
     overflow: hidden;
-    max-height: 300px;
+    max-height: 420px;
     transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .code-editor.expanded .code-content-wrapper {
-    max-height: 2000px;
+    max-height: none;
+    overflow: visible;
 }
 
 .code-content-wrapper::after {
@@ -826,6 +844,24 @@ button.btn-primary-cta {
 .code-content code {
     font-family: inherit;
     font-size: inherit;
+}
+
+/* Editable code surface (Phase 2D) */
+.code-content.code-textarea {
+    display: block;
+    width: 100%;
+    border: 0;
+    outline: none;
+    resize: none;
+    overflow-y: auto;
+    overflow-x: auto;
+    background: #1e1e1e;
+    color: #d4d4d4;
+}
+
+.code-content.code-textarea:disabled {
+    opacity: 0.85;
+    cursor: not-allowed;
 }
 
 /* Python Syntax Highlighting - VS Code Dark+ Theme */
@@ -966,6 +1002,35 @@ button.btn-primary-cta {
 .terminal-status.running::after {
     content: ' ▋';
     animation: blink 1s infinite;
+}
+
+.terminal-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.terminal-clear-btn {
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    cursor: pointer;
+    padding: 0.25rem 0.4rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.terminal-clear-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #c9d1d9;
+}
+
+.terminal-clear-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 @keyframes blink {

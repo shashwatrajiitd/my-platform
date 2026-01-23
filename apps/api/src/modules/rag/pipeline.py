@@ -1,34 +1,76 @@
 """
-RAG Pipeline
+Phase 3 — RAG Pipeline Orchestration (non-streaming, no API endpoints yet)
 
-TODO: Implement RAG pipeline for context retrieval and generation
+retrieval → prompt → LLM
 """
 
-from typing import List, Dict, Any
+from __future__ import annotations
 
-# TODO: Implement RAG pipeline
+from typing import Iterator
+
+from .llm import generate
+from .llm_stream import generate_stream
+from .prompts import build_prompt
+from .retriever import retrieve
+from .schemas import RAGSource, RAGStreamEvent
+
+
+NO_CONTEXT_FALLBACK = "I don’t have enough information to answer that."
+
+
+def run_rag(query: str, profile: str) -> str:
+    """
+    Entry point for Phase 3.
+
+    - Uses deterministic retrieval from Phase 2
+    - Builds a profile-aware, context-grounded prompt
+    - Invokes Gemini (non-streaming)
+    """
+
+    retrieval = retrieve(query, profile)
+
+    if not retrieval.chunks:
+        return NO_CONTEXT_FALLBACK
+
+    prompt = build_prompt(retrieval)
+    return generate(prompt)
+
+
+def run_rag_stream(query: str, profile: str) -> Iterator[RAGStreamEvent]:
+    """
+    Phase 4 streaming entry point.
+
+    Yields `RAGStreamEvent` objects suitable for SSE framing.
+    """
+
+    retrieval = retrieve(query, profile)
+
+    if not retrieval.chunks:
+        yield RAGStreamEvent(token=NO_CONTEXT_FALLBACK, done=True)
+        return
+
+    prompt = build_prompt(retrieval)
+
+    for token in generate_stream(prompt):
+        yield RAGStreamEvent(token=token)
+
+    sources: list[RAGSource] = []
+    for chunk in retrieval.chunks:
+        sources.append(
+            RAGSource(
+                id=chunk.id,
+                title=str(chunk.metadata.get("section_title", "") or ""),
+                snippet=chunk.content[:200],
+            )
+        )
+
+    yield RAGStreamEvent(sources=sources, done=True)
+
+
+# Back-compat: keep the earlier stub class shape in case anything imports it.
 class RAGPipeline:
-    """
-    RAG Pipeline for retrieving context and generating responses
-    
-    Steps:
-    1. Embed user query
-    2. Retrieve relevant documents from vector store
-    3. Build context prompt
-    4. Generate response with LLM
-    5. Return response with sources
-    """
-    
-    def __init__(self):
-        # TODO: Initialize vector store, embedding model, LLM
-        pass
-    
-    async def retrieve(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
-        """Retrieve relevant documents from vector store"""
-        # TODO: Implement retrieval
-        return []
-    
-    async def generate(self, query: str, context: List[Dict[str, Any]]) -> str:
-        """Generate response using LLM with context"""
-        # TODO: Implement generation
-        return ""
+    def retrieve(self, query: str, top_k: int = 5):
+        return retrieve(query=query, profile="recruiter", top_k=top_k)  # legacy placeholder
+
+    def generate(self, query: str, context):
+        raise NotImplementedError("Use run_rag() in Phase 3.")

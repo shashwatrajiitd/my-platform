@@ -7,6 +7,8 @@ TODO: Add middleware, CORS, rate limiting, etc.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.core.config import settings
+from src.modules.code_runner.router import router as code_runner_router
+from src.modules.rag.router import router as rag_router
 
 app = FastAPI(
     title="Portfolio API",
@@ -23,14 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# TODO: Include routers when modules are ready
-# from src.modules.rag.router import router as rag_router
-# from src.modules.code_runner.router import router as runner_router
-# from src.modules.profiles.router import router as profiles_router
-
-# app.include_router(rag_router, prefix="/api/rag", tags=["RAG"])
-# app.include_router(runner_router, prefix="/api/runner", tags=["Code Runner"])
-# app.include_router(profiles_router, prefix="/api/profiles", tags=["Profiles"])
+# Module routers
+# Note: code_runner router owns its `/api/code` prefix (Phase-1 requirement).
+app.include_router(code_runner_router)
+app.include_router(rag_router)
 
 
 @app.get("/")

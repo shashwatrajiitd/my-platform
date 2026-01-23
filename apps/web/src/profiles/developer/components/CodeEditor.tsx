@@ -1,8 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useReducer, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { conf as pythonConf, language as pythonLanguage } from 'monaco-editor/esm/vs/basic-languages/python/python'
+import { Terminal } from './Terminal'
+import { useCodeExecution } from '../hooks/useCodeExecution'
+import { terminalReducer } from '../hooks/useTerminalReducer'
 
-const CODE_CONTENT = `class ShashwatRaj:
+const MonacoEditor = dynamic<any>(() => import('@monaco-editor/react'), { ssr: false })
+
+const DEFAULT_CODE = `class ShashwatRaj:
     """
     Autonomous GenAI Systems Engineer & Multi-Agent Orchestrator
     Turning business constraints into scalable, production-grade AI magic.
@@ -85,74 +92,76 @@ if __name__ == "__main__":
     me = ShashwatRaj()
     print(me.greet())`
 
-const TERMINAL_OUTPUT = `Hey fellow dev! I'm Shaz, a Software Developer from IIT Delhi.
-Currently orchestrating multi-agent GenAI pipelines in production.
-Stack: LLMs / VLMs, Stable Diffusion, LoRA Fine-Tuning, Google Gemini, OpenAI, RAG + MLOps & microservices.
-Previously debugged revenue anomalies with PyTorch transformers @ Samsung R&D.
-Always down to fork repos, review PRs, or pair on scalable AI infra.`
-
 export function CodeEditor() {
   const [expanded, setExpanded] = useState(false)
-  const [running, setRunning] = useState(false)
   const [terminalVisible, setTerminalVisible] = useState(false)
-  const [terminalContent, setTerminalContent] = useState('')
+  const [code, setCode] = useState(DEFAULT_CODE)
+  const lineCount = useMemo(() => Math.max(1, code.split('\n').length), [code])
+  const previewLines = useMemo(() => Math.min(15, lineCount), [lineCount])
+  const visibleLines = expanded ? lineCount : previewLines
+  const editorHeight = useMemo(() => {
+    // Approx Monaco line height for fontSize 14 with comfortable spacing.
+    const lineHeightPx = 22
+    const verticalPaddingPx = 24
+    return `${Math.max(140, visibleLines * lineHeightPx + verticalPaddingPx)}px`
+  }, [visibleLines])
 
-  const handleRun = () => {
+  const initialTerminalState = useMemo(() => ({ lines: [], state: 'idle' as const }), [])
+  const [terminal, dispatch] = useReducer(terminalReducer, initialTerminalState)
+  const { run } = useCodeExecution(dispatch)
+  const running = terminal.state === 'running'
+
+  const handleRun = async () => {
     if (running) return
-    setRunning(true)
     setTerminalVisible(true)
-    setTerminalContent('')
-
-    // Animate terminal output
-    const lines = TERMINAL_OUTPUT.split('\n')
-    let currentLine = 0
-
-    const addLine = () => {
-      if (currentLine < lines.length) {
-        setTerminalContent((prev) => prev + (prev ? '\n' : '') + lines[currentLine])
-        currentLine++
-        setTimeout(addLine, 150)
-      } else {
-        setRunning(false)
-      }
-    }
-
-    addLine()
-  }
-
-  const handleKill = () => {
-    setRunning(false)
-    setTerminalVisible(false)
-    setTerminalContent('')
+    await run(code)
   }
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(CODE_CONTENT).then(() => {
+    navigator.clipboard.writeText(code).then(() => {
       // TODO: Show toast notification
     })
+  }
+
+  const handleReset = () => {
+    setCode(DEFAULT_CODE)
+  }
+
+  const handleClearTerminal = () => {
+    dispatch({ type: 'RESET' })
   }
 
   return (
     <>
       <div className={`code-editor ${expanded ? 'expanded' : ''}`}>
         <div className="code-editor-header">
-          <span className="code-editor-title">Python</span>
+          <div className="code-editor-title" aria-label="Python editor title">
+            <img
+              className="code-editor-lang-icon"
+              src="/assets/icons/languages/Python1.png"
+              alt="Python"
+              loading="lazy"
+            />
+            <span className="code-editor-lang">Python</span>
+            <span className="code-editor-sep"></span>
+            <span className="code-editor-subtitle"># Run this code using play ▶︎ button or Re-write your own code</span>
+          </div>
           <div className="code-editor-controls">
-            {running && (
-              <button
-                className="code-control-btn kill-btn"
-                onClick={handleKill}
-                title="Kill / Stop Execution"
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            )}
             <button
               className="code-control-btn expand-btn"
               onClick={() => setExpanded(!expanded)}
               title={expanded ? 'Collapse' : 'Expand'}
             >
               <i className={expanded ? 'fas fa-compress' : 'fas fa-bars'}></i>
+            </button>
+            <button
+              className="code-control-btn reset-btn"
+              onClick={handleReset}
+              title="Reset to template"
+              disabled={running}
+            >
+              <i className="fas fa-undo"></i>
+              <span className="copy-text">Reset</span>
             </button>
             {!running && (
               <button
@@ -174,27 +183,32 @@ export function CodeEditor() {
           </div>
         </div>
         <div className="code-content-wrapper">
-          <pre className="code-content">
-            <code className="language-python">{CODE_CONTENT}</code>
-          </pre>
+          <MonacoEditor
+            height={editorHeight}
+            language="python"
+            defaultLanguage="python"
+            theme="vs-dark"
+            value={code}
+            onChange={(v: string | undefined) => setCode(v ?? '')}
+            beforeMount={(monaco: any) => {
+              const hasPython = monaco.languages.getLanguages().some((l: any) => l.id === 'python')
+              if (!hasPython) monaco.languages.register({ id: 'python' })
+              monaco.languages.setMonarchTokensProvider('python', pythonLanguage)
+              monaco.languages.setLanguageConfiguration('python', pythonConf)
+              monaco.editor.setTheme('vs-dark')
+            }}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              wordWrap: 'on',
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+            }}
+          />
         </div>
       </div>
       {terminalVisible && (
-        <div className="terminal-output">
-          <div className="terminal-header">
-            <span className="terminal-title">Terminal</span>
-            <span className={`terminal-status ${running ? 'running' : ''}`}>
-              {running ? 'Running...' : 'Completed'}
-            </span>
-          </div>
-          <div className="terminal-content">
-            {terminalContent.split('\n').map((line, i) => (
-              <div key={i} className="terminal-line">
-                {line}
-              </div>
-            ))}
-          </div>
-        </div>
+        <Terminal lines={terminal.lines} state={terminal.state} onClear={handleClearTerminal} />
       )}
     </>
   )

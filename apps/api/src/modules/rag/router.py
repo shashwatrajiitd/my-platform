@@ -1,58 +1,33 @@
 """
-RAG Module Router
+Phase 4 — RAG Streaming API (SSE)
 
-TODO: Implement RAG-based AI chat assistant
+Exposes the Phase 3/4 RAG pipeline as a ChatGPT-like streaming endpoint.
 """
 
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-from typing import List, Optional
+from __future__ import annotations
 
-router = APIRouter()
+import json
 
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
 
-class ChatMessage(BaseModel):
-    role: str  # "user" | "assistant" | "system"
-    content: str
+from .pipeline import run_rag_stream
+from .schemas import RAGChatRequest
 
-
-class ChatRequest(BaseModel):
-    messages: List[ChatMessage]
-    profile_id: Optional[str] = None
-    stream: bool = False
+router = APIRouter(prefix="/api/rag", tags=["RAG"])
 
 
-class ChatResponse(BaseModel):
-    message: str
-    sources: Optional[List[str]] = None
-    tokens: Optional[int] = None
+@router.post("/chat")
+async def rag_chat(req: RAGChatRequest):
+    async def event_generator():
+        for event in run_rag_stream(req.message, req.profile):
+            yield f"data: {json.dumps(event.model_dump())}\n\n"
 
-
-@router.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
-    """
-    TODO: Implement RAG-based chat completion
-    
-    This endpoint will:
-    1. Retrieve relevant context from vector database
-    2. Build prompt with context
-    3. Call LLM API (OpenAI/Gemini)
-    4. Return response with sources
-    """
-    raise HTTPException(
-        status_code=501,
-        detail="RAG chat endpoint not yet implemented"
-    )
-
-
-@router.post("/chat/stream")
-async def chat_stream(request: ChatRequest):
-    """
-    TODO: Implement streaming chat responses
-    
-    This will stream tokens as they're generated
-    """
-    raise HTTPException(
-        status_code=501,
-        detail="RAG streaming endpoint not yet implemented"
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+        },
     )

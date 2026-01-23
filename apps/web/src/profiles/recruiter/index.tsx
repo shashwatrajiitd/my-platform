@@ -11,6 +11,7 @@ import { RecruiterCoreSkills } from './sections/CoreSkills'
 import { RecruiterEducation } from './sections/Education'
 import { RecruiterAchievements } from './sections/Achievements'
 import { RecruiterContact } from './sections/Contact'
+import { RecruiterAIFloatingAssistant } from './components/AIFloatingAssistant'
 
 export function RecruiterProfile() {
   useEffect(() => {
@@ -91,6 +92,7 @@ export function RecruiterProfile() {
           <RecruiterContact />
         </main>
       </div>
+      <RecruiterAIFloatingAssistant />
     </>
   )
 }
