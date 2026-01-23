@@ -1,0 +1,24 @@
+# Never send node_modules / build artifacts in Docker build context (prevents duplicate React installs)
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/out
+
+# Local env / secrets
+**/.env
+**/.env.*
+
+# Python artifacts
+**/__pycache__
+**/*.pyc
+apps/api/venv_api
+
+# Local vector DB / persistence
+apps/api/chroma
+chroma
+**/*.sqlite3
+**/*.bin
+
+# OS/editor noise
+.DS_Store
