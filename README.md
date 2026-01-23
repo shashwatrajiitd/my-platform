@@ -72,6 +72,7 @@ CODE_RUNNER_DOCKER_IMAGE=code-runner:latest
 ## Documentation
 
 - **Architecture & system design**: `docs/ARCHITECTURE.md`
+- **Detailed system deep dive (recommended)**: `docs/DETAILED_SYSTEM_DESIGN.md`
 - **RAG design + data flow**: `docs/RAG.md`
 - **Python runner (security + SSE protocol)**: `docs/CODE_RUNNER.md`
 - **Frontend structure (profiles, IDE, drag UI)**: `docs/FRONTEND.md`
