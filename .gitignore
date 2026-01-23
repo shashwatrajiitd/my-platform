@@ -48,6 +48,15 @@ venv/
 ENV/
 .venv
 
+# Local virtualenvs created inside apps
+**/venv_api/
+
+# Local Chroma DB data (generated)
+chroma/
+apps/api/chroma/
+**/chroma.sqlite3
+**/*.bin
+
 # IDE
 .vscode/
 .idea/

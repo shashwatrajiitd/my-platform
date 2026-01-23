@@ -26,9 +26,14 @@ services:
       - "8000:8000"
     environment:
       - DEBUG=true
-      - CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+      # pydantic-settings expects JSON for List[str] env vars
+      - CORS_ORIGINS=["http://localhost:3000","http://localhost:3001"]
+      # Store Chroma (SQLite) in a Docker-managed volume to avoid macOS bind-mount
+      # SQLite "disk I/O error" issues.
+      - CHROMA_PERSIST_DIR=/app/chroma
     volumes:
       - ../apps/api:/app
+      - chroma_data:/app/chroma
     # TODO: Add when RAG is implemented
     # - ./data/vectorstore:/app/data/vectorstore
 
@@ -39,3 +44,6 @@ services:
   #     - "8001:8000"
   #   volumes:
   #     - ./data/chromadb:/chroma/chroma
+
+volumes:
+  chroma_data:

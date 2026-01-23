@@ -7,11 +7,9 @@ export function RecruiterAbout() {
       <div className="section-divider"></div>
       <div className="about-content">
         <p className="about-text">
-        Applied AI Engineer specializing in GenAI
-systems, with a strong foundation in
-Mathematics and Computing from IIT
-Delhi, focused on building scalable,
-business-driven AI solutions.
+          Applied AI Engineer specializing in GenAI systems, with a strong
+          foundation in Mathematics and Computing from IIT Delhi, focused on
+          building scalable, business-driven AI solutions.
         </p>
       </div>
     </section>

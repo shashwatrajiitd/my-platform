@@ -5,6 +5,7 @@
 - Node.js >= 18.0.0
 - npm >= 9.0.0
 - Python >= 3.10 (for backend)
+ - Optional: Docker (only if using `CODE_EXECUTOR_MODE=docker`)
 
 ## Initial Setup
 
@@ -12,13 +13,10 @@
 # Install root dependencies
 npm install
 
-# Install frontend dependencies
-cd apps/web
-npm install
-
-# Install backend dependencies
-cd ../api
+# (Optional) Install backend deps directly (recommended for API dev)
+cd apps/api
 pip install -r requirements.txt
+cd ../..
 ```
 
 ## Development
@@ -51,6 +49,24 @@ npm run dev
 
 This uses Turbo to run both frontend and backend concurrently.
 
+## RAG setup (local)
+
+RAG uses **ChromaDB** (local persistent storage) + **Gemini** (embeddings + generation).
+
+1) Create `apps/api/.env`:
+
+```bash
+GOOGLE_API_KEY=...
+CHROMA_PERSIST_DIR=./chroma
+```
+
+2) Ingest profile knowledge into Chroma:
+
+```bash
+cd apps/api
+python -m src.modules.rag.ingest --all --reset
+```
+
 ## Building
 
 ```bash
@@ -73,11 +89,9 @@ cd apps/api
 - `packages/` - Shared packages
 - `infra/` - Infrastructure configs
 
-## Next Steps
+## Docs
 
-1. Complete profile migrations (see TODO comments in profile files)
-2. Set up backend services (RAG, code runner)
-3. Test all routes and functionality
-4. Deploy to production
-
-For detailed migration information, see `MIGRATION_SUMMARY.md`.
+- `docs/ARCHITECTURE.md` — system design + diagrams
+- `docs/RAG.md` — ingestion/retrieval/generation/streaming
+- `docs/CODE_RUNNER.md` — security model + SSE protocol
+- `docs/FRONTEND.md` — profiles + IDE + drag UI

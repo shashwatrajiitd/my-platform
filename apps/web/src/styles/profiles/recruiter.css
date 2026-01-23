@@ -1287,6 +1287,10 @@ button.btn-primary-cta {
     box-sizing: border-box;
 }
 
+/* (Intentionally left blank)
+   Recruiter profile CSS is loaded from /public/styles/profiles/recruiter.css.
+   Keep AI floating assistant styles there to avoid drift. */
+
 /* Experience Cards */
 .experience-card {
     width: 100%;

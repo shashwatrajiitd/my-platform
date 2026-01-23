@@ -60,11 +60,9 @@
     --netflix-white: #FFFFFF;
 }
 
-/* Add brightness glow to white text elements */
-#developer-page,
-#developer-page * {
-    color: inherit;
-}
+/* IMPORTANT:
+   Do NOT force `color: inherit` on `#developer-page *` because Monaco editor relies on
+   per-token span colors (e.g., `.mtk*`) for syntax highlighting. */
 
 /* Enhance white text brightness with glow */
 #developer-page .section-title,
@@ -760,6 +758,25 @@ button.btn-primary-cta {
     font-size: 0.9rem;
     font-weight: 600;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.code-editor-lang-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    object-fit: contain;
+}
+
+.code-editor-sep {
+    opacity: 0.9;
+}
+
+.code-editor-subtitle {
+    color: #6a9955; /* match Python comment green */
+    font-weight: 500;
 }
 
 .code-editor-controls {
@@ -1054,6 +1071,14 @@ button.btn-primary-cta {
 .terminal-line {
     opacity: 0;
     animation: fadeInLine 0.3s ease forwards;
+}
+
+.terminal-line.stdout {
+    color: #e5e5e5;
+}
+
+.terminal-line.stderr {
+    color: #ff6b6b;
 }
 
 @keyframes fadeInLine {

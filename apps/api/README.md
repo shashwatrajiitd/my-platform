@@ -17,11 +17,12 @@ apps/api/
 │   │   │   ├── vectorstore.py
 │   │   │   └── prompts.py
 │   │   │
-│   │   ├── code_runner/     # Python code execution
+│   │   ├── code_runner/     # Python code execution (sync + SSE)
 │   │   │   ├── router.py
-│   │   │   ├── sandbox.py
 │   │   │   ├── executor.py
-│   │   │   └── limits.py
+│   │   │   ├── executor_local.py
+│   │   │   ├── executor_docker.py
+│   │   │   └── validator.py
 │   │   │
 │   │   └── profiles/        # Profile data API
 │   │       └── router.py
@@ -52,31 +53,29 @@ docker build -t portfolio-api .
 docker run -p 8000:8000 portfolio-api
 ```
 
-## TODO: Implementation
+## Configuration
 
-### RAG Module
-- [ ] Set up vector database (ChromaDB/Pinecone)
-- [ ] Implement embedding pipeline
-- [ ] Create retrieval system
-- [ ] Integrate LLM (OpenAI/Gemini)
-- [ ] Add streaming support
+Create `apps/api/.env`:
 
-### Code Runner Module
-- [ ] Set up Docker sandbox
-- [ ] Implement code validation
-- [ ] Add resource limits
-- [ ] Create execution pipeline
-- [ ] Add streaming output
+```bash
+GOOGLE_API_KEY=...
+CHROMA_PERSIST_DIR=./chroma
 
-### Profiles Module
-- [ ] Create profile data models
-- [ ] Implement profile endpoints
-- [ ] Add profile-specific content API
+# local | docker
+CODE_EXECUTOR_MODE=local
+CODE_RUNNER_DOCKER_IMAGE=code-runner:latest
+```
+
+## RAG ingestion (local)
+
+```bash
+python -m src.modules.rag.ingest --all --reset
+```
 
 ## API Endpoints
 
 - `GET /` - API info
 - `GET /health` - Health check
-- `POST /api/rag/chat` - RAG chat (TODO)
-- `POST /api/runner/execute` - Code execution (TODO)
-- `GET /api/profiles/{profile_id}` - Profile data (TODO)
+- `POST /api/rag/chat` - RAG chat (SSE)
+- `POST /api/code/run` - Python execution (sync)
+- `POST /api/code/run/stream` - Python execution (SSE)

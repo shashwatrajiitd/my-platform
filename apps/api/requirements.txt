@@ -4,11 +4,11 @@ pydantic==2.5.0
 pydantic-settings==2.1.0
 python-multipart==0.0.6
 
-# TODO: Add when implementing RAG
-# langchain==0.1.0
-# langchain-openai==0.0.2
-# chromadb==0.4.18
-# sentence-transformers==2.2.2
+# RAG (Phase 1+)
+# Chroma 0.4.x is not NumPy 2 compatible (np.float_ removal).
+numpy<2
+chromadb==0.4.18
+google-generativeai==0.3.2
 
 # TODO: Add when implementing code runner
 # docker==6.1.3

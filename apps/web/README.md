@@ -21,18 +21,11 @@ apps/web/
 │   │
 │   ├── components/             # Shared components
 │   │   ├── netflix/           # Netflix-style UI components
-│   │   ├── editor/            # Monaco editor + terminal
 │   │   └── shared/            # Common components
 │   │
-│   ├── features/               # Feature modules
-│   │   ├── ai-chat/           # TODO: RAG-based chat
-│   │   ├── code-runner/       # TODO: Python execution
-│   │   └── profile-switcher/  # Profile switching logic
-│   │
 │   ├── services/              # API clients
-│   │   ├── api-client.ts      # TODO: Backend API client
-│   │   ├── rag-client.ts      # TODO: RAG service client
-│   │   └── runner-client.ts   # TODO: Code runner client
+│   │   ├── api-client.ts      # API base-url + helpers
+│   │   └── rag-client.ts      # RAG SSE client
 │   │
 │   ├── styles/                # Global styles
 │   │   ├── globals.css
@@ -60,9 +53,8 @@ Each profile is a self-contained domain with:
 npm run dev
 ```
 
-## TODO: Backend Integration
+## Key integrations
 
-- [ ] Connect to FastAPI backend for profile data
-- [ ] Integrate RAG chat assistant
-- [ ] Connect code runner to Python sandbox
-- [ ] Add analytics tracking
+- **RAG (SSE)**: `apps/web/src/services/rag-client.ts` → `/api/rag/chat`
+- **Python execution (SSE)**: Developer IDE uses `/api/code/run/stream`
+- **Drag-to-scroll carousel**: custom draggable scrollbar in `ContinueWatchingPreview`

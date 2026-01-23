@@ -25,13 +25,11 @@ developer/
 ## Features
 
 - **Code Editor**: Interactive Python code editor with syntax highlighting
-- **Terminal Output**: Simulated terminal execution
+- **Terminal Output**: Real-time streaming terminal output (stdout/stderr) via SSE
 - **Video Carousel**: Background video carousel in hero section
 - **Experience Cards**: Expandable experience cards
 
-## TODO: Backend Integration
+## How execution works
 
-- [ ] Connect code editor to Python sandbox API
-- [ ] Real-time terminal output streaming
-- [ ] Code execution history
-- [ ] Profile-specific analytics
+- **API**: `POST /api/code/run/stream` (Server-Sent Events)
+- **Frontend**: `useCodeExecution` streams events and renders them in `Terminal`

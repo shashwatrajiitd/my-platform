@@ -2,6 +2,7 @@
   "name": "portfolio-netflix",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@9.0.0",
   "description": "Production-grade portfolio monorepo with Next.js frontend and FastAPI backend",
   "workspaces": [
     "apps/*",
@@ -15,6 +16,7 @@
     "type-check": "turbo run type-check"
   },
   "devDependencies": {
+    "postcss": "^8.4.49",
     "turbo": "^2.0.0",
     "typescript": "^5.3.0"
   },
