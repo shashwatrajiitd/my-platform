@@ -4,6 +4,14 @@
 
 Provide a **profile-aware**, **grounded**, **streaming** AI assistant that answers from a controlled knowledge base rather than hallucinating.
 
+## Availability (current)
+
+This feature is **currently only exposed in the Recruiter profile UI** (see `apps/web/src/profiles/recruiter/...`).
+
+### Screenshot (Recruiter profile)
+
+![AI assistant (RAG)](https://drive.google.com/uc?export=view&id=1euHxEtyo0IsAu2EpFZfl_w2jLKfyqyt8)
+
 ## Data model
 
 - Each profile owns a JSON knowledge source in `apps/api/src/modules/rag/data/*.json`
@@ -30,6 +38,10 @@ sequenceDiagram
   API-->>UI: SSE data: {token}
   API-->>UI: SSE data: {sources, done:true}
 ```
+
+## RAG architecture diagram
+
+![RAG architecture diagram](https://drive.google.com/uc?export=view&id=19MEc26WQ2_q99Yu-AhQNRYrTQfS_lsRg)
 
 ## Components (backend)
 

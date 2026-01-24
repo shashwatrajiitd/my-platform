@@ -125,6 +125,10 @@ This specifically improves “fresh Docker volume” behavior: the system is usa
 
 ## RAG deep dive (implementation)
 
+### RAG architecture diagram
+
+![RAG architecture diagram](https://drive.google.com/uc?export=view&id=19MEc26WQ2_q99Yu-AhQNRYrTQfS_lsRg)
+
 ### Data sources (curated knowledge)
 
 Each profile has a JSON file:

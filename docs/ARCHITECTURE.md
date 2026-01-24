@@ -43,6 +43,10 @@ flowchart LR
   EXEC --> DOCKER[DockerExecutor\ndocker run --network=none --read-only ...]
 ```
 
+### RAG architecture diagram
+
+![RAG architecture diagram](https://drive.google.com/uc?export=view&id=19MEc26WQ2_q99Yu-AhQNRYrTQfS_lsRg)
+
 ## Key design decisions
 
 - **SSE first**: both RAG and code execution stream over Server-Sent Events for a ChatGPT-like UX.

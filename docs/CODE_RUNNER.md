@@ -8,6 +8,14 @@ Execute **untrusted Python code** from the browser with:
 - a streaming UX (stdout/stderr as it happens)
 - an explicit, auditable safety model
 
+## Availability (current)
+
+The Python IDE + streaming terminal UI is **currently implemented in the `developer` profile only**.
+
+### Screenshot (Developer profile)
+
+![Python IDE + Terminal](https://drive.google.com/uc?export=view&id=1R-AWAtYO15YiYph323TJzrI9LZiyIMVv)
+
 ## API surface
 
 ```mermaid
