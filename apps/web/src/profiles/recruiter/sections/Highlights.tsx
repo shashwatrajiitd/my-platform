@@ -5,7 +5,7 @@ import { ContinueWatchingPreview } from '@/components/netflix/ContinueWatchingPr
 export function RecruiterHighlights() {
   return (
     <ContinueWatchingPreview
-      title="Today's Top Picks for You"
+      title="Shashwat's Top Picks for You"
       titleId="recruiter-top-picks-title"
       sectionClassName="highlights-section"
       showExpandButton={false}

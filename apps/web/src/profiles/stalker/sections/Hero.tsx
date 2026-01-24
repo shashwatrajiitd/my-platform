@@ -44,8 +44,7 @@ export function StalkerHero() {
         <h1 className="stalker-hero-title">Lowkey Shaz</h1>
         <h2 className="stalker-hero-subtitle">Sigma GenAI Slanger</h2>
         <p className="hero-description">
-          Lowkey mogging the GenAI game - multi-agent sigma grind from IIT Delhi. Building to mog fellow devs, no cap.
-          Stalk responsibly or get ratio&apos;d frfr no Ohio.
+          Curious about AI, systems, and the human behind them — casually building cool things and overthinking the rest.
         </p>
         <div className="hero-cta-buttons">
           <button

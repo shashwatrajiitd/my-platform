@@ -7,12 +7,11 @@ export function AdventurerAbout() {
       <div className="section-divider"></div>
       <div className="about-content">
         <p className="about-text">
-          Hey explorer! I&apos;m Shashwat Raj, an IIT Delhi Mathematics &amp; Computing grad blending tech wizardry with a
-          passion for discovery with curiosity. At Purplle, I&apos;m pioneering GenAI for creative automation, but off-code,
-          I&apos;m diving into space tech wonders, trekking future tech trails, and unraveling physics puzzles. From NTSE
-          scholarships to JEE triumphs, my journey&apos;s about pushing boundaries, whether forecasting anomalies at Samsung
-          or personalizing apps with behavioral signals. Join me in adventuring through AI, hobbies like exploring AI tech
-          in space, and the vast cosmos!
+        Hey explorer 👋
+
+Shashwat is an IIT Delhi Mathematics & Computing graduate who works on GenAI systems at Purplle, but this profile isn’t about work titles or resumes.
+
+This space is about curiosity — space tech, travel, trekking, learning new things, and chasing ideas just because they’re interesting. From building AI systems to exploring mountains, physics puzzles, and new places, his journey is driven by curiosity more than checklists.
         </p>
       </div>
     </section>

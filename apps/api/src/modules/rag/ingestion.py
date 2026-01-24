@@ -109,6 +109,7 @@ def ingest_profile(
     overlap_tokens: int = DEFAULT_CHUNK_OVERLAP_TOKENS,
     batch_size: int = 64,
     reset: bool = False,
+    verbose: bool = False,
 ) -> int:
     """
     Ingest a single profile's sections into its dedicated Chroma collection.
@@ -148,12 +149,19 @@ def ingest_profile(
         except Exception:
             pass
 
+    if verbose:
+        print(f"[ingest] profile={profile} total_chunks={len(documents)} batch_size={batch_size} reset={reset}")
+
     # Embed + add in batches to avoid SDK limits.
     total = 0
     for i in range(0, len(documents), batch_size):
         docs_batch = documents[i : i + batch_size]
         meta_batch = metadatas[i : i + batch_size]
         ids_batch = ids[i : i + batch_size]
+
+        if verbose:
+            done = min(i, len(documents))
+            print(f"[ingest] profile={profile} embedding {done}/{len(documents)} ...")
 
         embeddings = embed_texts(docs_batch)
         if len(embeddings) != len(docs_batch):
@@ -178,16 +186,24 @@ def ingest_profile(
             )
 
         total += len(docs_batch)
+        if verbose:
+            print(f"[ingest] profile={profile} embedded {total}/{len(documents)}")
 
     return total
 
 
-def ingest_from_json(profile: str, *, reset: bool = False) -> Tuple[int, Dict[str, Any]]:
+def ingest_from_json(
+    profile: str,
+    *,
+    reset: bool = False,
+    batch_size: int = 64,
+    verbose: bool = False,
+) -> Tuple[int, Dict[str, Any]]:
     src = load_profile_source(profile)
     sections = src.get("sections") or []
     if not isinstance(sections, list):
         raise ValueError("Invalid source JSON: `sections` must be a list")
 
-    count = ingest_profile(profile, sections, reset=reset)
+    count = ingest_profile(profile, sections, reset=reset, batch_size=batch_size, verbose=verbose)
     return count, src
 

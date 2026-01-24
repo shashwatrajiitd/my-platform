@@ -8,12 +8,20 @@ Execute **untrusted Python code** from the browser with:
 - a streaming UX (stdout/stderr as it happens)
 - an explicit, auditable safety model
 
+## Availability (current)
+
+The Python IDE + streaming terminal UI is **currently implemented in the `developer` profile only**.
+
+### Snapshot (Developer profile)
+
+![Python IDE + Terminal](https://drive.google.com/uc?export=view&id=1R-AWAtYO15YiYph323TJzrI9LZiyIMVv)
+
 ## API surface
 
 ```mermaid
 flowchart LR
-  UI[Next.js Developer IDE] -->|POST /api/code/run| SYNC[Sync response]
-  UI -->|POST /api/code/run/stream (SSE)| STREAM[SSE output stream]
+  UI["Next.js Developer IDE"] -->|POST /api/code/run| SYNC["Sync response"]
+  UI -->|POST /api/code/run/stream<br/>SSE| STREAM["SSE output stream"]
 ```
 
 ### `POST /api/code/run` (sync)

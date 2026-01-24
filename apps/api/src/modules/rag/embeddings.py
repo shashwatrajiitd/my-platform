@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import os
+import socket
+import time
 from typing import List
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
 EMBEDDING_MODEL = "models/embedding-001"
 
@@ -90,8 +93,51 @@ def embed_texts(texts: List[str]) -> List[List[float]]:
 
     genai = _configure_genai()
 
-    # In the google-generativeai SDK, embed_content supports batch content.
-    response = genai.embed_content(model=EMBEDDING_MODEL, content=texts)
+    # Avoid indefinite hangs: allow an explicit timeout via env var.
+    # google-generativeai methods typically accept `request_options={"timeout": <seconds>}`.
+    timeout_s_raw = os.getenv("RAG_EMBED_TIMEOUT_S", "60").strip()
+    try:
+        timeout_s = float(timeout_s_raw)
+    except Exception:
+        timeout_s = 60.0
+
+    debug = os.getenv("RAG_EMBED_DEBUG", "").strip().lower() in ("1", "true", "yes", "y")
+    t0 = time.time()
+
+    # Ensure low-level sockets don't hang forever (DNS/TCP/SSL handshakes).
+    # This is process-global, but this CLI is single-purpose; it's a pragmatic safety net.
+    socket.setdefaulttimeout(timeout_s)
+
+    def _call_embed():
+        # In the google-generativeai SDK, embed_content supports batch content.
+        try:
+            return genai.embed_content(
+                model=EMBEDDING_MODEL,
+                content=texts,
+                request_options={"timeout": timeout_s},
+            )
+        except TypeError:
+            # Older SDK versions may not support request_options; fall back.
+            return genai.embed_content(model=EMBEDDING_MODEL, content=texts)
+
+    # Hard timeout: even if the SDK ignores request_options, do not hang forever.
+    # Note: we can't forcibly kill the underlying call, but we can at least surface
+    # a clear error quickly.
+    with ThreadPoolExecutor(max_workers=1) as ex:
+        fut = ex.submit(_call_embed)
+        try:
+            response = fut.result(timeout=timeout_s + 5)
+        except FutureTimeoutError as e:
+            raise RuntimeError(
+                "Embedding request timed out. This usually means network/SSL/proxy/DNS issues "
+                "or the Generative Language API endpoint is blocked. "
+                "Try: (1) VPN off/on, (2) different network, (3) ensure outbound HTTPS to "
+                "generativelanguage.googleapis.com works, (4) reduce RAG_EMBED_TIMEOUT_S."
+            ) from e
+
+    if debug:
+        dt = time.time() - t0
+        print(f"[embed] batch={len(texts)} timeout_s={timeout_s} elapsed_s={dt:.2f}")
 
     # Normalize common response shapes.
     if isinstance(response, dict):

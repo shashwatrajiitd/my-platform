@@ -55,7 +55,7 @@ export function AdventurerHero() {
         <h1 className="adventurer-hero-title">ShazQuest</h1>
         <h2 className="adventurer-hero-subtitle">AI Explorer & Engineer</h2>
         <p className="hero-description">
-          Crafting GenAI magic by day, chasing space tech wonders, mathematical mysteries, and global adventures by night
+        Exploring AI by day, and curiosity, travel, space, and ideas by night — turning questions into journeys.
           - turning curiosity into code.
         </p>
         <div className="hero-cta-buttons">

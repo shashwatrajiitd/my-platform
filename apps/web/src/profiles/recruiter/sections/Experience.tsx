@@ -18,25 +18,26 @@ export function RecruiterExperience() {
   const experiences = [
     {
       featured: true,
-      role: 'Software Developer (AI Infra)',
+      role: 'Applied AI Engineer',
       company: 'Purplle.com (Manash Lifestyle Pvt. Ltd.)',
       date: 'May 2025 - Present',
       location: 'Mumbai, India',
-      projectTitle: 'GenAI Creative Automation Platform',
-      summary: 'Built and deployed an autonomous multi-agent GenAI system for large-scale creative generation across paid marketing channels (Meta, Google Ads). Achieved 10-15x faster production and ~95% cost reduction.',
+      projectTitle: 'Leadership Associate - Technology',
+      summary: 'I\'m working as an Applied AI Engineer at Purplle.com (Manash Lifestyle Pvt. Ltd.) under the Accelerated Leadership Development Intervention Program. My core responsibility is to innovate, architect, build, and scale AI systems that directly improve efficiency and power product experiences across the organization.',
       details: {
-        description: 'Built and deployed an autonomous multi-agent GenAI system for large-scale creative generation across paid marketing channels (Meta, Google Ads).',
+        description: 'Built and deployed an autonomous multi-agent system for large-scale creative generation across paid marketing channels (Meta, Google Ads).',
         phases: [
           {
-            title: 'Phase 0 - Delivered system architecture:',
+            title: 'Phase 1 - Delivered system architecture:',
             features: [
               { label: 'Ideation Agents:', text: 'Generate high-volume campaign directions and ad concepts.' },
               { label: 'Generation Agents:', text: 'Produce high-fidelity static creatives via orchestrated LLM/VLM and diffusion pipelines.' },
-              { label: 'Moderation Agents:', text: 'Rank and filter outputs for brand compliance using vision-based evaluators.' },
+              { label: 'Moderation Agents:', text: 'Rank and filter outputs for brand compliance using multi-agent evaluators.' },
+              { label: 'Outcome:', text: 'Generating 3000+ marketing ideas and 1500+ creatives a month across 6 Brands, 30+ SKUs and 25+ campaigns.' },
             ],
           },
           {
-            title: 'Phase 1 - In execution:',
+            title: 'Phase 2 - In execution:',
             features: [
               { label: '', text: 'Scaling the platform to power L1 app surfaces (widgets, banners, category and theme-based recommendations)' },
               { label: '', text: 'Building a Creative Generation Service to remove Product team creative bottlenecks' },
@@ -44,7 +45,7 @@ export function RecruiterExperience() {
             ],
           },
           {
-            title: 'Phase 2 & 3 - Roadmap ownership:',
+            title: 'Phase 3 - Roadmap ownership:',
             features: [
               { label: '', text: 'User-level personalization and smart shuffling of widgets using personas and behavioral signals' },
               { label: '', text: 'GenAI-driven PDP image and video creative automation' },
@@ -58,13 +59,18 @@ export function RecruiterExperience() {
           'Enabled 10-15x more creative variants per campaign',
         ],
         techStack: [
-          { name: 'Gemini', icon: '/assets/icons/Tools/vertexai.png' },
-          { name: 'OpenAI', icon: '/assets/icons/Tools/openai.png' },
+          { name: 'Distributed Systems', icon: null },
+          { name: 'RAG', icon: null },
+          { name: 'DataBases (MySQL, Redis)', icon: null },
+          { name: 'Google Cloud Services (Compute, Storage, BigQuery, Cloud Run)', icon: null },
+          { name: 'Gemini', icon: null },
+          { name: 'OpenAI', icon: null },
           { name: 'Stable Diffusion (LoRA fine-tuning)', icon: null },
           { name: 'LLMs/VLMs', icon: null },
           { name: 'Vision Systems', icon: null },
           { name: 'Microservices', icon: null },
-          { name: 'Orchestration', icon: null },
+          { name: 'Docker', icon: null },
+          { name: 'Git', icon: null },
           { name: 'MLOps', icon: null },
         ],
       },
@@ -88,11 +94,11 @@ export function RecruiterExperience() {
           'Supported reliable inference under high-throughput data loads',
         ],
         techStack: [
-          { name: 'Python', icon: '/assets/icons/languages/python.png' },
-          { name: 'PyTorch', icon: '/assets/icons/Frameworks/pytorch.png' },
+          { name: 'Python', icon: null },
+          { name: 'PyTorch', icon: null },
           { name: 'Time-series ML models (Linear, Transformer)', icon: null },
-          { name: 'Apache Kafka', icon: '/assets/icons/Platforms/Kafka.png' },
-          { name: 'AWS (compute, storage)', icon: '/assets/icons/Tools/aws.png' },
+          { name: 'Apache Kafka', icon: null },
+          { name: 'AWS (compute, storage)', icon: null },
           { name: 'Distributed data processing frameworks', icon: null },
         ],
       },
@@ -179,7 +185,7 @@ export function RecruiterExperience() {
                 </div>
                 {exp.details.techStack && (
                   <div className="tech-stack">
-                    <h5>Tech Stack:</h5>
+                    <h5>Tech & Systems:</h5>
                     <div className="tech-tags">
                       {exp.details.techStack.map((tech, techIndex) => (
                         <span key={techIndex} className="tech-tag">

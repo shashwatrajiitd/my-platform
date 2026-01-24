@@ -2,6 +2,24 @@
 
 A Netflix-style, profile-driven portfolio with a **streaming RAG assistant**, a **browser-based Python IDE + streaming terminal**, and a **security-first code execution backend**.
 
+## Project status (important)
+
+**Recruiter profile is currently the only up-to-date experience.** The other profiles (`developer`, `adventurer`, `stalker`) are still under active development and may be incomplete or inconsistent.
+
+## Snapshots
+
+### Recruiter profile (current / up-to-date)
+
+![Recruiter profile](https://drive.google.com/uc?export=view&id=1ZNtsF7T_FTxQFQ-6KCdB2gu1JfbryGlQ)
+
+### AI assistant (RAG) — Recruiter profile only (currently)
+
+![AI assistant (RAG)](https://drive.google.com/uc?export=view&id=1euHxEtyo0IsAu2EpFZfl_w2jLKfyqyt8)
+
+### Python IDE + Terminal — Developer profile only (currently)
+
+![Python IDE + Terminal](https://drive.google.com/uc?export=view&id=1R-AWAtYO15YiYph323TJzrI9LZiyIMVv)
+
 ## What’s inside
 
 - **Profiles**: `developer`, `recruiter`, `stalker`, `adventurer` — redesigned layouts + richer content.
@@ -13,14 +31,18 @@ A Netflix-style, profile-driven portfolio with a **streaming RAG assistant**, a 
 
 ```mermaid
 flowchart LR
-  U[User Browser] -->|Next.js App Router| W[apps/web]
-  W -->|SSE: /api/rag/chat| API[apps/api (FastAPI)]
+  U["User Browser"] -->|Next.js App Router| W["apps/web"]
+  W -->|SSE: /api/rag/chat| API["apps/api<br/>(FastAPI)"]
   W -->|SSE: /api/code/run/stream| API
-  API -->|retrieve| VS[(ChromaDB\n(per-profile collections))]
-  API -->|stream tokens| LLM[Gemini LLM]
-  API -->|embed| EMB[Gemini Embeddings]
-  API -->|execute code| EXE[Executor\nlocal or docker]
+  API -->|retrieve| VS[(ChromaDB<br/>per-profile collections)]
+  API -->|stream tokens| LLM["Gemini LLM"]
+  API -->|embed| EMB["Gemini Embeddings"]
+  API -->|execute code| EXE["Executor<br/>local or docker"]
 ```
+
+### RAG architecture diagram
+
+![RAG architecture diagram](https://drive.google.com/uc?export=view&id=19MEc26WQ2_q99Yu-AhQNRYrTQfS_lsRg)
 
 ## Repo layout
 

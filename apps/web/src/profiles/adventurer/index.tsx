@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { ProfileNavbar } from '@/components/shared/ProfileNavbar'
-import { ContinueWatching } from '@/components/shared/ContinueWatching'
+import { ContinueWatchingPreview } from '@/components/netflix/ContinueWatchingPreview'
 import { AdventurerHero } from './sections/Hero'
 import { AdventurerAbout } from './sections/About'
 import { AdventurerExperience } from './sections/Experience'
@@ -10,11 +10,23 @@ import { AdventurerSkills } from './sections/Skills'
 import { AdventurerEducation } from './sections/Education'
 import { AdventurerAchievements } from './sections/Achievements'
 import { AdventurerContact } from './sections/Contact'
+import { AIFloatingAssistant } from '@/components/shared/AIFloatingAssistant'
 
 export function AdventurerProfile() {
   useEffect(() => {
     const id = 'profile-css-adventurer'
     const href = '/styles/profiles/adventurer.css'
+    if (!document.getElementById(id)) {
+      const link = document.createElement('link')
+      link.id = id
+      link.rel = 'stylesheet'
+      link.href = href
+      document.head.appendChild(link)
+    }
+  }, [])
+  useEffect(() => {
+    const id = 'profile-css-ai-assistant'
+    const href = '/styles/profiles/ai-assistant.css'
     if (!document.getElementById(id)) {
       const link = document.createElement('link')
       link.id = id
@@ -41,14 +53,45 @@ export function AdventurerProfile() {
         <main className="instagram-main">
           <AdventurerHero />
           <AdventurerAbout />
-          <ContinueWatching
-            title="Continue Watching for Adventurer"
+          <ContinueWatchingPreview
+            title="Continue Watching for Recruiter"
+            showHoverScrollArrows
             items={[
-              { label: 'Experience', targetId: 'adventurer-experience', iconClass: 'fas fa-briefcase', gradient: '135deg, #667eea 0%, #764ba2 100%' },
-              { label: 'Skills', targetId: 'adventurer-skills', iconClass: 'fas fa-code', gradient: '135deg, #f093fb 0%, #f5576c 100%' },
-              { label: 'Education', targetId: 'adventurer-education', iconClass: 'fas fa-graduation-cap', gradient: '135deg, #4facfe 0%, #00f2fe 100%' },
-              { label: 'Achievements', targetId: 'adventurer-achievements', iconClass: 'fas fa-trophy', gradient: '135deg, #fa709a 0%, #fee140 100%' },
-              { label: 'Contact', targetId: 'adventurer-contact', iconClass: 'fas fa-envelope', gradient: '135deg, #30cfd0 0%, #330867 100%' },
+              {
+                id: 'adventurer-experience',
+                title: 'Experience',
+                targetId: 'adventurer-experience',
+                previewSrc: '/assets/profiles/Recruiter/Continue_watching/Experience.mp4',
+                chips: ['Software Development', 'AI Systems', 'System Design', 'Scalability'],
+              },
+              {
+                id: 'adventurer-skills',
+                title: 'Core Skills',
+                targetId: 'adventurer-skills',
+                previewSrc: '/assets/profiles/Recruiter/Continue_watching/Skills.mp4',
+                chips: ['Programming & Engineering', 'Core AI & machine learning', 'Systems, scale & production'],
+              },
+              {
+                id: 'adventurer-education',
+                title: 'Education',
+                targetId: 'adventurer-education',
+                previewSrc: '/assets/profiles/Recruiter/Continue_watching/Education.mp4',
+                chips: ['Academic', 'Credential', 'Pedigree'],
+              },
+              {
+                id: 'adventurer-achievements',
+                title: 'Achievements',
+                targetId: 'adventurer-achievements',
+                previewSrc: '/assets/profiles/Recruiter/Continue_watching/Achievement.mp4',
+                chips: ['Scholastic', 'Technical', 'Olympiads'],
+              },
+              {
+                id: 'adventurer-contact',
+                title: 'Contact',
+                targetId: 'adventurer-contact',
+                previewSrc: '/assets/profiles/Recruiter/Continue_watching/Contact.mp4',
+                chips: ['Email', 'Availability', 'Resume'],
+              },
             ]}
           />
           <AdventurerExperience />
@@ -58,6 +101,7 @@ export function AdventurerProfile() {
           <AdventurerContact />
         </main>
       </div>
+      <AIFloatingAssistant profile="adventurer" />
     </>
   )
 }

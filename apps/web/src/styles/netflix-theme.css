@@ -214,7 +214,7 @@
 
 .profile-card:hover {
   color: var(--netflix-white);
-  transform: scale(1.05);
+  transform: none;
 }
 
 .profile-img-container {
@@ -243,7 +243,7 @@
 
 .profile-card:hover .profile-img-container {
   border: 3px solid var(--netflix-white);
-  transform: scale(1.05);
+  transform: none;
 }
 
 .profile-name {

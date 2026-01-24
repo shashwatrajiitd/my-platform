@@ -13,35 +13,39 @@ This is a Turbo-powered monorepo with two production-style applications:
 
 ```mermaid
 flowchart TB
-  ROOT[portfolio-netflix] --> APPS[apps/]
-  ROOT --> PACK[packages/]
-  ROOT --> INFRA[infra/]
-  ROOT --> DOCS[docs/]
+  ROOT["portfolio-netflix"] --> APPS["apps/"]
+  ROOT --> PACK["packages/"]
+  ROOT --> INFRA["infra/"]
+  ROOT --> DOCS["docs/"]
 
-  APPS --> WEB[web (Next.js)]
-  APPS --> API[api (FastAPI)]
+  APPS --> WEB["web<br/>(Next.js)"]
+  APPS --> API["api<br/>(FastAPI)"]
 
-  PACK --> UI[ui]
-  PACK --> TYPES[types]
-  PACK --> UTILS[utils]
+  PACK --> UI["ui"]
+  PACK --> TYPES["types"]
+  PACK --> UTILS["utils"]
 ```
 
 ## Runtime architecture
 
 ```mermaid
 flowchart LR
-  B[Browser] -->|HTTP| NEXT[Next.js]
-  NEXT -->|SSE /api/rag/chat| FASTAPI[FastAPI API]
+  B["Browser"] -->|HTTP| NEXT["Next.js"]
+  NEXT -->|SSE /api/rag/chat| FASTAPI["FastAPI API"]
   NEXT -->|SSE /api/code/run/stream| FASTAPI
 
-  FASTAPI -->|embed query & docs| GEMEMB[Gemini Embeddings]
-  FASTAPI -->|retrieve| CHROMA[(ChromaDB\nPersistentClient)]
-  FASTAPI -->|prompt + stream tokens| GEMLLM[Gemini LLM]
+  FASTAPI -->|embed query & docs| GEMEMB["Gemini Embeddings"]
+  FASTAPI -->|retrieve| CHROMA[(ChromaDB<br/>PersistentClient)]
+  FASTAPI -->|prompt + stream tokens| GEMLLM["Gemini LLM"]
 
-  FASTAPI -->|execute code| EXEC[Executor]
-  EXEC --> LOCAL[LocalExecutor\nsubprocess python -I -S -u]
-  EXEC --> DOCKER[DockerExecutor\ndocker run --network=none --read-only ...]
+  FASTAPI -->|execute code| EXEC["Executor"]
+  EXEC --> LOCAL["LocalExecutor<br/>subprocess python -I -S -u"]
+  EXEC --> DOCKER["DockerExecutor<br/>docker run --network=none --read-only ..."]
 ```
+
+### RAG architecture diagram
+
+![RAG architecture diagram](https://drive.google.com/uc?export=view&id=19MEc26WQ2_q99Yu-AhQNRYrTQfS_lsRg)
 
 ## Key design decisions
 

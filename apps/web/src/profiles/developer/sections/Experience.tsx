@@ -2,15 +2,6 @@
 
 import { useState } from 'react'
 
-function toggleExperienceCard(card: HTMLElement) {
-  card.classList.toggle('expanded')
-  const toggle = card.querySelector('.expand-toggle i')
-  if (toggle) {
-    toggle.classList.toggle('fa-chevron-down')
-    toggle.classList.toggle('fa-chevron-up')
-  }
-}
-
 export function DeveloperExperience() {
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
 
@@ -27,25 +18,28 @@ export function DeveloperExperience() {
   const experiences = [
     {
       featured: true,
-      role: 'Software Developer (AI Infra)',
+      role: 'Applied AI Engineer',
       company: 'Purplle.com (Manash Lifestyle Pvt. Ltd.)',
       date: 'May 2025 - Present',
       location: 'Mumbai, India',
-      projectTitle: 'GenAI Creative Automation Platform',
-      summary: 'Built and deployed an autonomous multi-agent GenAI system for large-scale creative generation across paid marketing channels (Meta, Google Ads). Achieved 10-15x faster production and ~95% cost reduction.',
+      projectTitle: 'Leadership Associate - Technology',
+      summary:
+        "I'm working as an Applied AI Engineer at Purplle.com (Manash Lifestyle Pvt. Ltd.) under the Accelerated Leadership Development Intervention Program. My core responsibility is to innovate, architect, build, and scale AI systems that directly improve efficiency and power product experiences across the organization.",
       details: {
-        description: 'Built and deployed an autonomous multi-agent GenAI system for large-scale creative generation across paid marketing channels (Meta, Google Ads).',
+        description:
+          'Built and deployed an autonomous multi-agent system for large-scale creative generation across paid marketing channels (Meta, Google Ads).',
         phases: [
           {
-            title: 'Phase 0 - Delivered system architecture:',
+            title: 'Phase 1 - Delivered system architecture:',
             features: [
               { label: 'Ideation Agents:', text: 'Generate high-volume campaign directions and ad concepts.' },
               { label: 'Generation Agents:', text: 'Produce high-fidelity static creatives via orchestrated LLM/VLM and diffusion pipelines.' },
-              { label: 'Moderation Agents:', text: 'Rank and filter outputs for brand compliance using vision-based evaluators.' },
+              { label: 'Moderation Agents:', text: 'Rank and filter outputs for brand compliance using multi-agent evaluators.' },
+              { label: 'Outcome:', text: 'Generating 3000+ marketing ideas and 1500+ creatives a month across 6 Brands, 30+ SKUs and 25+ campaigns.' },
             ],
           },
           {
-            title: 'Phase 1 - In execution:',
+            title: 'Phase 2 - In execution:',
             features: [
               { label: '', text: 'Scaling the platform to power L1 app surfaces (widgets, banners, category and theme-based recommendations)' },
               { label: '', text: 'Building a Creative Generation Service to remove Product team creative bottlenecks' },
@@ -53,7 +47,7 @@ export function DeveloperExperience() {
             ],
           },
           {
-            title: 'Phase 2 & 3 - Roadmap ownership:',
+            title: 'Phase 3 - Roadmap ownership:',
             features: [
               { label: '', text: 'User-level personalization and smart shuffling of widgets using personas and behavioral signals' },
               { label: '', text: 'GenAI-driven PDP image and video creative automation' },
@@ -67,22 +61,56 @@ export function DeveloperExperience() {
           'Enabled 10-15x more creative variants per campaign',
         ],
         techStack: [
-          { name: 'Gemini', icon: '/assets/icons/Tools/vertexai.png' },
-          { name: 'OpenAI', icon: '/assets/icons/Tools/openai.png' },
+          { name: 'Distributed Systems', icon: null },
+          { name: 'RAG', icon: null },
+          { name: 'DataBases (MySQL, Redis)', icon: null },
+          { name: 'Google Cloud Services (Compute, Storage, BigQuery, Cloud Run)', icon: null },
+          { name: 'Gemini', icon: null },
+          { name: 'OpenAI', icon: null },
           { name: 'Stable Diffusion (LoRA fine-tuning)', icon: null },
           { name: 'LLMs/VLMs', icon: null },
           { name: 'Vision Systems', icon: null },
           { name: 'Microservices', icon: null },
-          { name: 'Orchestration', icon: null },
+          { name: 'Docker', icon: null },
+          { name: 'Git', icon: null },
           { name: 'MLOps', icon: null },
+        ],
+      },
+    },
+    {
+      featured: false,
+      role: 'Software Developer Intern',
+      company: 'Samsung R&D',
+      date: 'May 2024 - July 2024',
+      location: 'Bangalore, India',
+      projectTitle: 'Real-Time Revenue Forecasting and Anomaly Detection Platform',
+      summary:
+        'Developed a real-time revenue forecasting and anomaly detection pipeline for Samsung Ads, integrating classical regression models with transformer-based time-series architectures. Improved revenue prediction accuracy by 5%.',
+      details: {
+        features: [
+          'Developed a real-time revenue forecasting and anomaly detection pipeline for Samsung Ads, integrating classical regression models with transformer-based time-series architectures',
+          'Implemented anomaly detection logic on forecast residuals to flag revenue deviations in near real time, improving observability for downstream business systems',
+        ],
+        impact: [
+          'Improved revenue prediction accuracy by 5%',
+          'Reduced anomaly detection latency',
+          'Supported reliable inference under high-throughput data loads',
+        ],
+        techStack: [
+          { name: 'Python', icon: null },
+          { name: 'PyTorch', icon: null },
+          { name: 'Time-series ML models (Linear, Transformer)', icon: null },
+          { name: 'Apache Kafka', icon: null },
+          { name: 'AWS (compute, storage)', icon: null },
+          { name: 'Distributed data processing frameworks', icon: null },
         ],
       },
     },
   ]
 
   return (
-    <section id="developer-experience" className="developer-section">
-      <h2 className="section-title">WORK EXPERIENCE</h2>
+    <section id="developer-experience" className="recruiter-section">
+      <h2 className="section-title">Work experience</h2>
       <div className="section-divider"></div>
       
       {experiences.map((exp, index) => (
@@ -124,7 +152,11 @@ export function DeveloperExperience() {
               <div className="experience-project">
                 <h4 className="project-title">{exp.projectTitle}</h4>
                 <div className="project-description">
-                  <p><strong>{exp.details.description}</strong></p>
+                  {exp.details.description && (
+                    <p>
+                      <strong>{exp.details.description}</strong>
+                    </p>
+                  )}
                   
                   {exp.details.phases?.map((phase, phaseIndex) => (
                     <div key={phaseIndex} className="project-phase">
@@ -139,6 +171,14 @@ export function DeveloperExperience() {
                     </div>
                   ))}
                   
+                  {exp.details.features && (
+                    <ul className="project-features">
+                      {exp.details.features.map((feature, featureIndex) => (
+                        <li key={featureIndex}>{feature}</li>
+                      ))}
+                    </ul>
+                  )}
+                  
                   {exp.details.impact && (
                     <div className="project-impact">
                       <h5>Impact:</h5>
@@ -152,7 +192,7 @@ export function DeveloperExperience() {
                 </div>
                 {exp.details.techStack && (
                   <div className="tech-stack">
-                    <h5>Tech Stack:</h5>
+                    <h5>Tech & Systems:</h5>
                     <div className="tech-tags">
                       {exp.details.techStack.map((tech, techIndex) => (
                         <span key={techIndex} className="tech-tag">

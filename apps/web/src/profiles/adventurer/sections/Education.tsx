@@ -3,22 +3,22 @@
 export function AdventurerEducation() {
   const education = [
     {
-      degree: "B.Tech. in Mathematics & Computing",
+      degree: 'Bachelor of Technology (B.Tech.) in Mathematics & Computing',
       institution: "Indian Institute of Technology, Delhi",
-      date: "Oct 2021 - May 2025",
-      grade: "Grade: 70%",
+      date: "June 2021 - May 2025",
+      grade: "New Delhi, India",
     },
     {
-      degree: "High School (12th Grade)",
+      degree: "High School (12th Grade) with Mathematics and Computer Science",
       institution: "Stephens International Public School",
       date: "March 2019 - May 2021",
-      grade: "Grade: 95%",
+      grade: "Jammu, India",
     },
   ]
 
   return (
-    <section id="adventurer-education" className="adventurer-section">
-      <h2 className="section-title">EDUCATION</h2>
+    <section id="adventurer-education" className="recruiter-section">
+      <h2 className="section-title">Education</h2>
       <div className="section-divider"></div>
       <div className="education-container">
         {education.map((edu, index) => (

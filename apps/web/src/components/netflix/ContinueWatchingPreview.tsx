@@ -5,6 +5,14 @@ import { createPortal } from 'react-dom'
 
 const HOVER_DELAY_MS = 400
 
+function isVideoSrc(src: string) {
+  return /\.(mp4|webm|ogg)(\?|#|$)/i.test(src)
+}
+
+function isImageSrc(src: string) {
+  return /\.(png|jpe?g|webp|gif|avif)(\?|#|$)/i.test(src)
+}
+
 type ContinueWatchingPreviewItem = {
   id: string
   title: string
@@ -32,6 +40,10 @@ function useVideoPoster(videoSrc: string) {
   const [poster, setPoster] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!isVideoSrc(videoSrc)) {
+      setPoster(null)
+      return
+    }
     let cancelled = false
     const video = document.createElement('video')
     video.src = videoSrc
@@ -114,9 +126,11 @@ const HoverPreviewCard = memo(function HoverPreviewCard({
   showExpandButton?: boolean
   onWheel?: (event: WheelEvent<HTMLDivElement>) => void
 }) {
+  const isVideo = isVideoSrc(previewSrc)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
+    if (!isVideo) return
     const video = videoRef.current
     if (!video) return
     video.currentTime = 0
@@ -127,7 +141,7 @@ const HoverPreviewCard = memo(function HoverPreviewCard({
       video.pause()
       video.currentTime = 0
     }
-  }, [])
+  }, [isVideo])
 
   return (
     <div
@@ -138,7 +152,11 @@ const HoverPreviewCard = memo(function HoverPreviewCard({
       onWheel={onWheel}
     >
       <div className="hover-preview-media">
-        <video ref={videoRef} muted loop playsInline preload="auto" src={previewSrc} />
+        {isVideo ? (
+          <video ref={videoRef} muted loop playsInline preload="auto" src={previewSrc} />
+        ) : (
+          <img src={previewSrc} alt="" />
+        )}
       </div>
       <div className="hover-preview-meta">
         <div className="hover-preview-header">
@@ -183,7 +201,8 @@ const MovieTile = memo(function MovieTile({
   onSelect: (id: string, rect: DOMRect) => void
   setTileRef: (id: string, node: HTMLDivElement | null) => void
 }) {
-  const poster = useVideoPoster(previewSrc)
+  const videoPoster = useVideoPoster(previewSrc)
+  const poster = isImageSrc(previewSrc) ? previewSrc : videoPoster
   const hoverTimeoutRef = useRef<number | null>(null)
   const tileRef = useRef<HTMLDivElement | null>(null)
 

@@ -18,6 +18,13 @@ def main() -> int:
     parser.add_argument("--all", action="store_true", help="Ingest all profiles")
     parser.add_argument("--reset", action="store_true", help="Best-effort reset (delete known ids) before ingesting")
     parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=64,
+        help="Embedding batch size (smaller can be more reliable if requests are slow).",
+    )
+    parser.add_argument("--verbose", action="store_true", help="Print progress while embedding/ingesting")
+    parser.add_argument(
         "--sanity-query",
         default="What experience do you have?",
         help="Run a post-ingest similarity query (requires embeddings to work)",
@@ -29,7 +36,12 @@ def main() -> int:
 
     total_chunks = 0
     for profile in profiles:
-        count, src = ingest_from_json(profile, reset=args.reset)
+        count, src = ingest_from_json(
+            profile,
+            reset=args.reset,
+            batch_size=args.batch_size,
+            verbose=args.verbose,
+        )
         total_chunks += count
         print(f"[ingest] profile={profile} sections={len(src.get('sections', []))} chunks={count}")
 
