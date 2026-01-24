@@ -11,12 +11,23 @@ import { RecruiterCoreSkills } from './sections/CoreSkills'
 import { RecruiterEducation } from './sections/Education'
 import { RecruiterAchievements } from './sections/Achievements'
 import { RecruiterContact } from './sections/Contact'
-import { RecruiterAIFloatingAssistant } from './components/AIFloatingAssistant'
+import { AIFloatingAssistant } from '@/components/shared/AIFloatingAssistant'
 
 export function RecruiterProfile() {
   useEffect(() => {
     const id = 'profile-css-recruiter'
     const href = '/styles/profiles/recruiter.css'
+    if (!document.getElementById(id)) {
+      const link = document.createElement('link')
+      link.id = id
+      link.rel = 'stylesheet'
+      link.href = href
+      document.head.appendChild(link)
+    }
+  }, [])
+  useEffect(() => {
+    const id = 'profile-css-ai-assistant'
+    const href = '/styles/profiles/ai-assistant.css'
     if (!document.getElementById(id)) {
       const link = document.createElement('link')
       link.id = id
@@ -92,7 +103,7 @@ export function RecruiterProfile() {
           <RecruiterContact />
         </main>
       </div>
-      <RecruiterAIFloatingAssistant />
+      <AIFloatingAssistant profile="recruiter" />
     </>
   )
 }

@@ -778,6 +778,11 @@ button.btn-primary-cta {
     padding: 0 !important;
 }
 
+/* Recruiter Achievements row (remove outer padding to align flush) */
+.continue-watching.recruiter-continue-watching.core-skills-achievements {
+    padding: 0 !important;
+}
+
 /* Netflix-style hover scroll arrows for recruiter ContinueWatchingPreview rows */
 .continue-watching.recruiter-continue-watching .carousel-wrapper {
     position: relative;
@@ -924,7 +929,7 @@ button.btn-primary-cta {
 
 .hover-preview-card.is-visible {
     opacity: 1;
-    transform: translateY(0) scale(1.04);
+    transform: translateY(0) scale(1);
 }
 
 .hover-preview-content {

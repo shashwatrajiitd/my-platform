@@ -6,11 +6,7 @@ function normalizeNewlines(text: string): string {
 
 function isSafeHref(href: string): boolean {
   const trimmed = href.trim()
-  return (
-    trimmed.startsWith('http://') ||
-    trimmed.startsWith('https://') ||
-    trimmed.startsWith('mailto:')
-  )
+  return trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('mailto:')
 }
 
 function normalizeLinkedInHref(raw: string): string {
@@ -49,11 +45,7 @@ function linkifyText(text: string, keyPrefix: string): React.ReactNode[] {
       // Email
       const email = main
       out.push(
-        <a
-          key={`${keyPrefix}-email-${start}`}
-          href={`mailto:${email}`}
-          className="recruiter-ai-link"
-        >
+        <a key={`${keyPrefix}-email-${start}`} href={`mailto:${email}`} className="recruiter-ai-link">
           {email}
         </a>
       )
@@ -145,9 +137,7 @@ function parseEmphasis(text: string, keyPrefix: string): React.ReactNode[] {
     }
 
     const inner = text.slice(next + 1, close)
-    nodes.push(
-      <em key={`${keyPrefix}-i-${next}`}>{parseEmphasis(inner, `${keyPrefix}-i-i-${next}`)}</em>
-    )
+    nodes.push(<em key={`${keyPrefix}-i-${next}`}>{parseEmphasis(inner, `${keyPrefix}-i-i-${next}`)}</em>)
     i = close + 1
   }
 

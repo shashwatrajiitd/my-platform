@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ragClient, type RAGSource } from '@/services/rag-client'
-import { SafeMarkdown } from './SafeMarkdown'
+import { ragClient, type RAGProfile, type RAGSource } from '@/services/rag-client'
+import { SafeMarkdown } from '@/components/shared/SafeMarkdown'
 
 type ChatRole = 'user' | 'assistant'
 
@@ -47,23 +47,21 @@ function ChatBubbleContent({
   return <span className="recruiter-ai-plaintext">{content}</span>
 }
 
-export function RecruiterAIFloatingAssistant() {
+export function AIFloatingAssistant({ profile }: { profile: RAGProfile }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isEnlarged, setIsEnlarged] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
-  const [openSourceByMessageId, setOpenSourceByMessageId] = useState<Record<string, string | null>>(
-    {}
-  )
+  const [openSourceByMessageId, setOpenSourceByMessageId] = useState<Record<string, string | null>>({})
   const [messages, setMessages] = useState<ChatItem[]>(() => [
     {
       id: createId(),
       role: 'assistant',
-      content: 'Ask me anything about Shashwat — I’ll answer using the portfolio data.',
+      content: `Ask me anything about Shashwat — I’ll answer using the ${profile} portfolio data.`,
     },
   ])
 
-  const panelId = useMemo(() => 'recruiter-ai-chat-panel', [])
+  const panelId = useMemo(() => `${profile}-ai-chat-panel`, [profile])
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const endRef = useRef<HTMLDivElement>(null)
   const fabRafRef = useRef<number | null>(null)
@@ -121,13 +119,11 @@ export function RecruiterAIFloatingAssistant() {
 
     try {
       await ragClient.streamChat(
-        { message: value, profile: 'recruiter' },
+        { message: value, profile },
         (evt) => {
           if (evt.token) {
             setMessages((prev) =>
-              prev.map((m) =>
-                m.id === assistantId ? { ...m, content: (m.content || '') + evt.token } : m
-              )
+              prev.map((m) => (m.id === assistantId ? { ...m, content: (m.content || '') + evt.token } : m))
             )
           }
 
@@ -138,9 +134,7 @@ export function RecruiterAIFloatingAssistant() {
           }
 
           if (evt.done) {
-            setMessages((prev) =>
-              prev.map((m) => (m.id === assistantId ? { ...m, done: true } : m))
-            )
+            setMessages((prev) => prev.map((m) => (m.id === assistantId ? { ...m, done: true } : m)))
             setIsStreaming(false)
             abortRef.current = null
           }
@@ -151,11 +145,7 @@ export function RecruiterAIFloatingAssistant() {
       if (controller.signal.aborted) return
       const msg = e instanceof Error ? e.message : 'Chat request failed'
       setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId
-            ? { ...m, content: msg, done: true, isError: true }
-            : m
-        )
+        prev.map((m) => (m.id === assistantId ? { ...m, content: msg, done: true, isError: true } : m))
       )
       setIsStreaming(false)
       abortRef.current = null
@@ -207,21 +197,16 @@ export function RecruiterAIFloatingAssistant() {
         <div className="recruiter-ai-panel__body">
           <div className="recruiter-ai-messages" aria-live="polite">
             {messages.map((m) => (
-              <div
-                key={m.id}
-                className={`recruiter-ai-message ${
-                  m.role === 'user' ? 'is-user' : 'is-assistant'
-                }`}
-              >
+              <div key={m.id} className={`recruiter-ai-message ${m.role === 'user' ? 'is-user' : 'is-assistant'}`}>
                 <div className="recruiter-ai-message__bubble">
                   <ChatBubbleContent
                     role={m.role}
                     content={m.content}
                     isStreamingPlaceholder={m.role === 'assistant' && isStreaming && !m.done}
                   />
-                  {!!m.sources?.length && (
+                  {!!m.sources?.length &&
                     (() => {
-                      const panelId = `recruiter-ai-sources-panel-${m.id}`
+                      const sourcesPanelId = `recruiter-ai-sources-panel-${m.id}`
                       const selectedSourceId = openSourceByMessageId[m.id] || null
                       const selectedSource = m.sources?.find((s) => s.id === selectedSourceId) || null
 
@@ -233,9 +218,7 @@ export function RecruiterAIFloatingAssistant() {
                               <button
                                 type="button"
                                 className="recruiter-ai-sources__clear"
-                                onClick={() =>
-                                  setOpenSourceByMessageId((prev) => ({ ...prev, [m.id]: null }))
-                                }
+                                onClick={() => setOpenSourceByMessageId((prev) => ({ ...prev, [m.id]: null }))}
                                 aria-label="Hide source details"
                               >
                                 Hide
@@ -260,7 +243,7 @@ export function RecruiterAIFloatingAssistant() {
                                     }))
                                   }
                                   aria-expanded={isActive}
-                                  aria-controls={panelId}
+                                  aria-controls={sourcesPanelId}
                                 >
                                   <span className="recruiter-ai-source-chip__icon" aria-hidden="true">
                                     <i className="fa-solid fa-link" />
@@ -273,7 +256,7 @@ export function RecruiterAIFloatingAssistant() {
 
                           {!!selectedSource && (
                             <div
-                              id={panelId}
+                              id={sourcesPanelId}
                               className="recruiter-ai-sources__panel"
                               role="region"
                               aria-label={`Source details: ${selectedSource.title || selectedSource.id}`}
@@ -285,9 +268,7 @@ export function RecruiterAIFloatingAssistant() {
                                 <button
                                   type="button"
                                   className="recruiter-ai-sources__panelClose"
-                                  onClick={() =>
-                                    setOpenSourceByMessageId((prev) => ({ ...prev, [m.id]: null }))
-                                  }
+                                  onClick={() => setOpenSourceByMessageId((prev) => ({ ...prev, [m.id]: null }))}
                                   aria-label="Close source details"
                                 >
                                   <i className="fa-solid fa-xmark" />
@@ -300,8 +281,7 @@ export function RecruiterAIFloatingAssistant() {
                           )}
                         </div>
                       )
-                    })()
-                  )}
+                    })()}
                 </div>
               </div>
             ))}

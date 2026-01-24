@@ -58,7 +58,7 @@ export function DeveloperHero() {
         <h1 className="developer-hero-title">Shaz.dev</h1>
         <h2 className="developer-hero-subtitle">AI Software Developer</h2>
         <p className="hero-description">
-          Architecting autonomous multi-agent GenAI pipelines with LLMs, VLMs, GenAI models, and MLOps orchestration - accelerating inference & engineering end-to-end production AI at scale.
+        Designing and scaling autonomous multi-agent GenAI systems — from LLM and VLM orchestration to production-grade MLOps and high-throughput inference.
         </p>
         <div className="hero-cta-buttons">
           <button

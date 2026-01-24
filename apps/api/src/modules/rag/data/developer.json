@@ -1,5 +1,5 @@
 {
-  "profile": "recruiter",
+  "profile": "developer",
   "profile_intent": "Developers or people with a strong technical background are the expected audience for this profile. Profile should provide strong value to the audience by providing  a  detailed technical overview of the candidate's experience, skills, and projects. Evaluate candidate for high-impact applied AI, GenAI systems, and platform engineering roles",
   "audience": ["Developers", "Software Engineers", "AI Engineers", "Tech Leads", "Founders", "Hiring Managers", "Recruiters", "Tech Enthusiasts"],
   "sections": [

@@ -3,8 +3,13 @@ import '../styles/globals.css'
 import '../styles/netflix-theme.css'
 
 export const metadata: Metadata = {
-  title: 'Shashwat Raj | ML Engineer',
+  title: 'Shashwat Raj | AI Engineer',
   description: 'AI Engineer | IIT Delhi | Building Scalable AI Systems',
+  icons: {
+    icon: '/assets/icons/icon.png',
+    shortcut: '/assets/icons/icon.png',
+    apple: '/assets/icons/icon.png',
+  },
 }
 
 export default function RootLayout({

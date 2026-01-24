@@ -7,9 +7,9 @@ export function RecruiterAbout() {
       <div className="section-divider"></div>
       <div className="about-content">
         <p className="about-text">
-          Applied AI Engineer specializing in GenAI systems, with a strong
+          Hello! I'm Shashwat, an Applied AI Engineer specializing in GenAI systems, with a strong
           foundation in Mathematics and Computing from IIT Delhi, focused on
-          building scalable, business-driven AI solutions.
+          building scalable, business-driven AI solutions. To know more, ASK AI ASSISTANT.
         </p>
       </div>
     </section>
