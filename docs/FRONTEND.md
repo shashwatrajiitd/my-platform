@@ -10,13 +10,13 @@ The web app is built on Next.js App Router with **profile isolation**: each prof
 
 ```mermaid
 flowchart TB
-  APP[app/] --> HOME[page.tsx (profile selection)]
-  APP --> ROUTE[profile/[profileId]/page.tsx]
-  ROUTE --> PROFILES[profiles/*]
-  PROFILES --> DEV[developer]
-  PROFILES --> REC[recruiter]
-  PROFILES --> ADV[adventurer]
-  PROFILES --> STK[stalker]
+  APP["app/"] --> HOME["page.tsx<br/>profile selection"]
+  APP --> ROUTE["profile/[profileId]/page.tsx"]
+  ROUTE --> PROFILES["profiles/*"]
+  PROFILES --> DEV["developer"]
+  PROFILES --> REC["recruiter"]
+  PROFILES --> ADV["adventurer"]
+  PROFILES --> STK["stalker"]
 ```
 
 ## Recruiter profile (current / up-to-date)
@@ -43,9 +43,9 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-  participant Editor as CodeEditor (Monaco)
+  participant Editor as CodeEditor - Monaco
   participant Hook as useCodeExecution
-  participant API as /api/code/run/stream (SSE)
+  participant API as /api/code/run/stream - SSE
   participant Term as Terminal UI
 
   Editor->>Hook: run(code)

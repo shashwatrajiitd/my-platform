@@ -12,7 +12,7 @@ Execute **untrusted Python code** from the browser with:
 
 The Python IDE + streaming terminal UI is **currently implemented in the `developer` profile only**.
 
-### Screenshot (Developer profile)
+### Snapshot (Developer profile)
 
 ![Python IDE + Terminal](https://drive.google.com/uc?export=view&id=1R-AWAtYO15YiYph323TJzrI9LZiyIMVv)
 
@@ -20,8 +20,8 @@ The Python IDE + streaming terminal UI is **currently implemented in the `develo
 
 ```mermaid
 flowchart LR
-  UI[Next.js Developer IDE] -->|POST /api/code/run| SYNC[Sync response]
-  UI -->|POST /api/code/run/stream (SSE)| STREAM[SSE output stream]
+  UI["Next.js Developer IDE"] -->|POST /api/code/run| SYNC["Sync response"]
+  UI -->|POST /api/code/run/stream<br/>SSE| STREAM["SSE output stream"]
 ```
 
 ### `POST /api/code/run` (sync)
