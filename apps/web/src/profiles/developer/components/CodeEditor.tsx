@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useReducer, useRef, useState } from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { conf as pythonConf, language as pythonLanguage } from 'monaco-editor/esm/vs/basic-languages/python/python'
 import { Terminal } from './Terminal'
@@ -116,6 +116,7 @@ export function CodeEditor() {
   const [expanded, setExpanded] = useState(false)
   const [terminalVisible, setTerminalVisible] = useState(false)
   const [code, setCode] = useState(DEFAULT_CODE)
+  const [isMobile, setIsMobile] = useState(false)
   const editorRef = useRef<any>(null)
   const lineCount = useMemo(() => Math.max(1, code.split('\n').length), [code])
   const previewLines = useMemo(() => Math.min(15, lineCount), [lineCount])
@@ -131,6 +132,23 @@ export function CodeEditor() {
   const [terminal, dispatch] = useReducer(terminalReducer, initialTerminalState)
   const { run } = useCodeExecution(dispatch)
   const running = terminal.state === 'running'
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const mq = window.matchMedia('(max-width: 768px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+
+    // Safari < 14 uses addListener/removeListener.
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', update)
+      return () => mq.removeEventListener('change', update)
+    }
+
+    mq.addListener(update)
+    return () => mq.removeListener(update)
+  }, [])
 
   const handleRun = async () => {
     if (running) return
@@ -165,7 +183,9 @@ export function CodeEditor() {
             />
             <span className="code-editor-lang">Python</span>
             <span className="code-editor-sep"></span>
-            <span className="code-editor-subtitle"># Run this code using play ▶︎ button or Re-write your own code</span>
+            <span className="code-editor-subtitle">
+              {isMobile ? 'play ▶︎ button' : '# Run this code using play ▶︎ button or Re-write your own code'}
+            </span>
           </div>
           <div className="code-editor-controls">
             <button
@@ -271,6 +291,16 @@ export function CodeEditor() {
               wordWrap: 'on',
               scrollBeyondLastLine: false,
               automaticLayout: true,
+              // Mobile: tighten gutter so line numbers (1/2/3...) don't waste horizontal space.
+              ...(isMobile
+                ? {
+                    lineNumbersMinChars: 2,
+                    lineDecorationsWidth: 6,
+                    glyphMargin: false,
+                    folding: false,
+                    padding: { top: 8, bottom: 8, left: 4, right: 4 },
+                  }
+                : {}),
             }}
           />
         </div>

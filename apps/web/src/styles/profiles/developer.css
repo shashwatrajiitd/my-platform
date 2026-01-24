@@ -1136,6 +1136,17 @@ button.btn-primary-cta {
 
 /* Responsive Design for Code Editor */
 @media screen and (max-width: 768px) {
+    .code-editor-title {
+        min-width: 0;
+    }
+
+    .code-editor-subtitle {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 12ch;
+    }
+
     .code-content {
         font-size: 0.8rem;
         padding: 1rem;
