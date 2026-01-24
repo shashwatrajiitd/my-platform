@@ -1,0 +1,41 @@
+substitutions:
+  _REGION: "asia-south1"
+  _REPO: "portfolio"
+  _SERVICE: "portfolio-web"
+  _NEXT_PUBLIC_API_URL: "https://portfolio-api-qtsas2ligq-el.a.run.app"
+
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "--platform=linux/amd64",
+        "-f",
+        "apps/web/Dockerfile",
+        "--build-arg",
+        "NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}",
+        "-t",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA",
+        ".",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA"]
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: "gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "${_SERVICE}",
+        "--image",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA",
+        "--region",
+        "${_REGION}",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated",
+        "--port",
+        "8080",
+      ]
