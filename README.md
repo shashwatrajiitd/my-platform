@@ -6,7 +6,7 @@ A Netflix-style, profile-driven portfolio with a **streaming RAG assistant**, a 
 
 **Recruiter profile is currently the only up-to-date experience.** The other profiles (`developer`, `adventurer`, `stalker`) are still under active development and may be incomplete or inconsistent.
 
-## Screenshots
+## Snapshots
 
 ### Recruiter profile (current / up-to-date)
 
@@ -31,13 +31,13 @@ A Netflix-style, profile-driven portfolio with a **streaming RAG assistant**, a 
 
 ```mermaid
 flowchart LR
-  U[User Browser] -->|Next.js App Router| W[apps/web]
-  W -->|SSE: /api/rag/chat| API[apps/api (FastAPI)]
+  U["User Browser"] -->|Next.js App Router| W["apps/web"]
+  W -->|SSE: /api/rag/chat| API["apps/api<br/>(FastAPI)"]
   W -->|SSE: /api/code/run/stream| API
-  API -->|retrieve| VS[(ChromaDB\n(per-profile collections))]
-  API -->|stream tokens| LLM[Gemini LLM]
-  API -->|embed| EMB[Gemini Embeddings]
-  API -->|execute code| EXE[Executor\nlocal or docker]
+  API -->|retrieve| VS[(ChromaDB<br/>per-profile collections)]
+  API -->|stream tokens| LLM["Gemini LLM"]
+  API -->|embed| EMB["Gemini Embeddings"]
+  API -->|execute code| EXE["Executor<br/>local or docker"]
 ```
 
 ### RAG architecture diagram
