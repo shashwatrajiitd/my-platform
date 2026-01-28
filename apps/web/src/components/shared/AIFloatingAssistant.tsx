@@ -69,11 +69,19 @@ export function AIFloatingAssistant({ profile }: { profile: RAGProfile }) {
 
   useEffect(() => {
     if (!isOpen) return
-    inputRef.current?.focus()
+    // Avoid scrolling the whole page when focusing the input.
+    try {
+      inputRef.current?.focus({ preventScroll: true })
+    } catch {
+      inputRef.current?.focus()
+    }
   }, [isOpen])
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // IMPORTANT: Only auto-scroll when the panel is open.
+    // Otherwise this can scroll the entire page on initial profile load.
+    if (!isOpen) return
+    endRef.current?.scrollIntoView({ behavior: 'auto' })
   }, [messages, isOpen])
 
   useEffect(() => {
