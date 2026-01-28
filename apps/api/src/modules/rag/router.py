@@ -29,7 +29,7 @@ async def rag_ingest(profile: str = "all", reset: bool = False):
     Ingest bundled portfolio JSON data into Chroma.
 
     - profile: one of {developer,recruiter,adventurer,stalker} or "all"
-    - reset: best-effort delete known ids before ingesting (idempotent-ish)
+    - reset: delete + recreate the collection before ingesting (required after changing embedding models)
     """
 
     if not (os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")):
@@ -69,16 +69,6 @@ async def rag_chat(req: RAGChatRequest):
         # Emit an immediate first event so clients don't appear "stuck"
         # while embeddings / vectorstore / LLM work happens.
         yield _send({"token": "", "done": False})
-
-        # Fail fast if Gemini is not configured.
-        if not (os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")):
-            yield _send(
-                {
-                    "token": "RAG is not configured: set GOOGLE_API_KEY (or GEMINI_API_KEY) on the API server.",
-                    "done": True,
-                }
-            )
-            return
 
         # Guard against long blocks (network calls / broken SDKs) by running the
         # pipeline in a background thread and streaming from a queue with timeouts.

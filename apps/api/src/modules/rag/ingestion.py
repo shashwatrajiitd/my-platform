@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from .embeddings import embed_texts
-from .vectorstore import get_collection
+from .vectorstore import get_collection, recreate_collection
 
 
 DEFAULT_CHUNK_TOKENS = 250
@@ -117,7 +117,9 @@ def ingest_profile(
     Returns the number of chunks ingested.
     """
 
-    collection = get_collection(profile)
+    # IMPORTANT: When switching embedding models, Chroma collections must be recreated
+    # (the collection's embedding dimension is fixed after first insert).
+    collection = recreate_collection(profile) if reset else get_collection(profile)
 
     documents: List[str] = []
     metadatas: List[Dict[str, Any]] = []
@@ -141,13 +143,6 @@ def ingest_profile(
                 }
             )
             ids.append(f"{profile}_{section_id}_{i}")
-
-    if reset and ids:
-        # Best-effort delete; some Chroma versions require ids only.
-        try:
-            collection.delete(ids=ids)
-        except Exception:
-            pass
 
     if verbose:
         print(f"[ingest] profile={profile} total_chunks={len(documents)} batch_size={batch_size} reset={reset}")

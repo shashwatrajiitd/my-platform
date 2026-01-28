@@ -16,7 +16,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Ingest portfolio documents into Chroma (per-profile).")
     parser.add_argument("--profile", choices=VALID_PROFILES, help="Ingest a single profile")
     parser.add_argument("--all", action="store_true", help="Ingest all profiles")
-    parser.add_argument("--reset", action="store_true", help="Best-effort reset (delete known ids) before ingesting")
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Delete and recreate the profile collection before ingesting (required after changing embedding models).",
+    )
     parser.add_argument(
         "--batch-size",
         type=int,

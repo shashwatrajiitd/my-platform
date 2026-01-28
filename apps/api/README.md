@@ -69,7 +69,7 @@ CODE_RUNNER_DOCKER_IMAGE=code-runner:latest
 ## RAG ingestion (local)
 
 ```bash
-python -m src.modules.rag.ingest --all --reset
+python3 -m src.modules.rag.ingest --all --reset
 ```
 
 ## API Endpoints

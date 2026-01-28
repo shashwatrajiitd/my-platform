@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 from typing import Literal
 
+from .embeddings import EMBEDDING_MODEL
+
 VALID_PROFILES = ("recruiter", "developer", "adventurer", "stalker")
 Profile = Literal["recruiter", "developer", "adventurer", "stalker"]
 
@@ -61,5 +63,44 @@ def get_collection(profile: str):
         raise ValueError(f"Invalid profile '{profile}'. Expected one of: {', '.join(VALID_PROFILES)}")
 
     client = get_client()
-    return client.get_or_create_collection(name=f"{profile}_docs")
+    name = f"{profile}_docs"
+
+    # Store the embedding model used to build this collection so future upgrades
+    # can detect mismatches and force a rebuild.
+    desired_metadata = {"embedding_model": EMBEDDING_MODEL}
+
+    # Prefer fetching first so we can read metadata (if present).
+    try:
+        col = client.get_collection(name=name)
+        meta = getattr(col, "metadata", None) or {}
+        if isinstance(meta, dict) and meta.get("embedding_model") == EMBEDDING_MODEL:
+            return col
+        # If metadata is missing or mismatched, we keep the existing collection.
+        # Rebuilds are handled explicitly via `recreate_collection()` (used by `--reset` ingest).
+        return col
+    except Exception:
+        # Collection doesn't exist yet: create with metadata.
+        return client.get_or_create_collection(name=name, metadata=desired_metadata)
+
+
+def recreate_collection(profile: str):
+    """
+    Delete and recreate the profile collection.
+
+    This is required when changing embedding models, because Chroma collections
+    are dimension-fixed after the first insert.
+    """
+
+    if profile not in VALID_PROFILES:
+        raise ValueError(f"Invalid profile '{profile}'. Expected one of: {', '.join(VALID_PROFILES)}")
+
+    client = get_client()
+    name = f"{profile}_docs"
+    try:
+        client.delete_collection(name=name)
+    except Exception:
+        # Best-effort: if it doesn't exist or delete isn't supported, continue.
+        pass
+
+    return client.get_or_create_collection(name=name, metadata={"embedding_model": EMBEDDING_MODEL})
 

@@ -63,7 +63,7 @@ flowchart LR
   W -->|SSE POST /api/code/run/stream| API
   W -->|POST /api/code/run| API
 
-  API -->|embed| GEM_EMB[Gemini Embeddings\nmodels/embedding-001]
+  API -->|embed| GEM_EMB[Gemini Embeddings\nmodels/gemini-embedding-001]
   API -->|retrieve| CHROMA[(ChromaDB\nPersistentClient)]
   API -->|generate/stream| GEM_LLM[Gemini LLM\nstream=True]
 
@@ -178,7 +178,7 @@ sequenceDiagram
 
 Embedding wrapper: `apps/api/src/modules/rag/embeddings.py`
 
-- Embedding model: **`models/embedding-001`**
+- Embedding model: **`models/gemini-embedding-001`**
 - The wrapper normalizes multiple SDK response shapes into `List[List[float]]`.
 - Keys:
   - `GOOGLE_API_KEY` (preferred)

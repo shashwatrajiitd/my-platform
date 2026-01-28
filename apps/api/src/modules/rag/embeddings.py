@@ -6,7 +6,13 @@ import time
 from typing import List
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
-EMBEDDING_MODEL = "models/embedding-001"
+# Gemini embedding model.
+# NOTE: If you change this, you MUST recreate the vector store (collection) and re-embed docs,
+# because Chroma collections are dimension-fixed after first insert.
+#
+# This repo uses google-generativeai (Gemini API, v1beta) which exposes embeddings as:
+# - models/gemini-embedding-001
+EMBEDDING_MODEL = "models/gemini-embedding-001"
 
 
 def _extract_embedding(obj) -> List[float] | None:

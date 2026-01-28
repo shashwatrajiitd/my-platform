@@ -64,7 +64,7 @@ CHROMA_PERSIST_DIR=./chroma
 
 ```bash
 cd apps/api
-python -m src.modules.rag.ingest --all --reset
+python3 -m src.modules.rag.ingest --all --reset
 ```
 
 ## Building

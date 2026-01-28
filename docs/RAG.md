@@ -49,7 +49,7 @@ sequenceDiagram
   - `chunk_text()` uses paragraph-first splitting + token-windowing (whitespace token approximation)
   - Writes documents + metadatas + ids into Chroma, embedding via Gemini
 - **Embeddings**: `src/modules/rag/embeddings.py`
-  - Uses Gemini embeddings (`models/embedding-001`)
+  - Uses Gemini embeddings (`models/gemini-embedding-001`)
   - Normalizes multiple SDK response shapes into `List[List[float]]`
 - **Vector store**: `src/modules/rag/vectorstore.py`
   - `PersistentClient` with `CHROMA_PERSIST_DIR` (default `./chroma`)
@@ -92,6 +92,8 @@ CHROMA_PERSIST_DIR=./chroma
 
 ```bash
 cd apps/api
-python -m src.modules.rag.ingest --all --reset
+python3 -m src.modules.rag.ingest --all --reset
 ```
+
+Note: `--reset` is required after changing embedding models because Chroma collections are dimension-fixed.
 
