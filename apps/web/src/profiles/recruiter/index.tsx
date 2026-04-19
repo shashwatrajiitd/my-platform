@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { ProfileNavbar } from '@/components/shared/ProfileNavbar'
 import { ContinueWatchingPreview } from '@/components/netflix/ContinueWatchingPreview'
 import { RecruiterHero } from './sections/Hero'
@@ -14,29 +13,6 @@ import { RecruiterContact } from './sections/Contact'
 import { AIFloatingAssistant } from '@/components/shared/AIFloatingAssistant'
 
 export function RecruiterProfile() {
-  useEffect(() => {
-    const id = 'profile-css-recruiter'
-    const href = '/styles/profiles/recruiter.css'
-    if (!document.getElementById(id)) {
-      const link = document.createElement('link')
-      link.id = id
-      link.rel = 'stylesheet'
-      link.href = href
-      document.head.appendChild(link)
-    }
-  }, [])
-  useEffect(() => {
-    const id = 'profile-css-ai-assistant'
-    const href = '/styles/profiles/ai-assistant.css'
-    if (!document.getElementById(id)) {
-      const link = document.createElement('link')
-      link.id = id
-      link.rel = 'stylesheet'
-      link.href = href
-      document.head.appendChild(link)
-    }
-  }, [])
-
   return (
     <>
       <ProfileNavbar

@@ -6,46 +6,39 @@ export function DeveloperHero() {
   const videoContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // TODO: Initialize video carousel
-    // This will be migrated from the original developer.js
-    const initializeVideoCarousel = () => {
-      const container = videoContainerRef.current
-      if (!container) return
+    const container = videoContainerRef.current
+    if (!container) return
 
-      const videos = ['v0.mp4', 'v1.mp4', 'v2.mp4']
-      let currentIndex = 0
+    const videoFiles = ['v0.mp4', 'v1.mp4', 'v2.mp4']
+    let currentIndex = 0
 
-      videos.forEach((videoFile, index) => {
-        const video = document.createElement('video')
-        video.className = 'hero-video'
-        video.src = `/assets/bg_videos/developer_profile/${videoFile}`
-        video.autoplay = true
-        video.muted = true
-        video.loop = true
-        video.playsInline = true
-        video.preload = 'auto'
+    videoFiles.forEach((videoFile, index) => {
+      const video = document.createElement('video')
+      video.className = 'hero-video'
+      video.src = `/assets/bg_videos/developer_profile/${videoFile}`
+      video.autoplay = true
+      video.muted = true
+      video.loop = true
+      video.playsInline = true
+      video.preload = index === 0 ? 'auto' : 'none'
+      if (index === 0) video.classList.add('active')
+      container.appendChild(video)
+    })
 
-        if (index === 0) {
-          video.classList.add('active')
-        }
-
-        container.appendChild(video)
-      })
-
-      // Auto-rotate videos
-      const switchVideo = () => {
-        const videos = container.querySelectorAll('.hero-video')
-        if (videos.length === 0) return
-
-        videos[currentIndex].classList.remove('active')
-        currentIndex = (currentIndex + 1) % videos.length
-        videos[currentIndex].classList.add('active')
-      }
-
-      setInterval(switchVideo, 10000) // Switch every 10 seconds
+    const switchVideo = () => {
+      const videoEls = container.querySelectorAll<HTMLVideoElement>('.hero-video')
+      if (!videoEls.length) return
+      videoEls[currentIndex].classList.remove('active')
+      currentIndex = (currentIndex + 1) % videoEls.length
+      videoEls[currentIndex].preload = 'auto'
+      videoEls[currentIndex].classList.add('active')
     }
 
-    initializeVideoCarousel()
+    const intervalId = setInterval(switchVideo, 10000)
+    return () => {
+      clearInterval(intervalId)
+      container.querySelectorAll('.hero-video').forEach(v => v.remove())
+    }
   }, [])
 
   return (

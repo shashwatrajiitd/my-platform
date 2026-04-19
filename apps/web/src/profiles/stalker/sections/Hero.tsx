@@ -6,32 +6,18 @@ export function StalkerHero() {
   const videoContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const initializeVideoCarousel = () => {
-      const container = videoContainerRef.current
-      if (!container) return
+    const container = videoContainerRef.current
+    if (!container) return
 
-      const videos = ['s0.mp4']
-      let currentIndex = 0
-
-      videos.forEach((videoFile, index) => {
-        const video = document.createElement('video')
-        video.className = 'hero-video'
-        video.src = `/assets/bg_videos/stalker_profile/${videoFile}`
-        video.autoplay = true
-        video.muted = true
-        video.loop = true
-        video.playsInline = true
-        video.preload = 'auto'
-
-        if (index === 0) {
-          video.classList.add('active')
-        }
-
-        container.appendChild(video)
-      })
-    }
-
-    initializeVideoCarousel()
+    const video = document.createElement('video')
+    video.className = 'hero-video active'
+    video.src = '/assets/bg_videos/stalker_profile/s0.mp4'
+    video.autoplay = true
+    video.muted = true
+    video.loop = true
+    video.playsInline = true
+    video.preload = 'auto'
+    container.appendChild(video)
   }, [])
 
   return (

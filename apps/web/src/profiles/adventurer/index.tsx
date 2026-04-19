@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { ProfileNavbar } from '@/components/shared/ProfileNavbar'
 import { ContinueWatchingPreview } from '@/components/netflix/ContinueWatchingPreview'
 import { AdventurerHero } from './sections/Hero'
@@ -13,29 +12,6 @@ import { AdventurerContact } from './sections/Contact'
 import { AIFloatingAssistant } from '@/components/shared/AIFloatingAssistant'
 
 export function AdventurerProfile() {
-  useEffect(() => {
-    const id = 'profile-css-adventurer'
-    const href = '/styles/profiles/adventurer.css'
-    if (!document.getElementById(id)) {
-      const link = document.createElement('link')
-      link.id = id
-      link.rel = 'stylesheet'
-      link.href = href
-      document.head.appendChild(link)
-    }
-  }, [])
-  useEffect(() => {
-    const id = 'profile-css-ai-assistant'
-    const href = '/styles/profiles/ai-assistant.css'
-    if (!document.getElementById(id)) {
-      const link = document.createElement('link')
-      link.id = id
-      link.rel = 'stylesheet'
-      link.href = href
-      document.head.appendChild(link)
-    }
-  }, [])
-
   return (
     <>
       <ProfileNavbar
