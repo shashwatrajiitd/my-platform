@@ -1,16 +1,4 @@
-cat > apps/api/.gcloudignore <<'EOF'
-# Local virtualenv
 venv_api/
-
-# Local/persisted vector DB (don’t ship to Cloud Build)
-chroma/
-*.sqlite3
-*.bin
-
-# Python cache
 **/__pycache__/
 **/*.pyc
-
-# Local env
 .env
-EOF

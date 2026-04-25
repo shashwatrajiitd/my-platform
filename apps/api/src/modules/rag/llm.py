@@ -6,10 +6,21 @@ Isolated so streaming + tooling can be swapped in Phase 4 without touching promp
 
 from __future__ import annotations
 
+import functools
 import os
 from typing import Any, Dict, List, Optional
 
 MODEL = "gemini-3-flash-preview"
+
+
+@functools.lru_cache(maxsize=1)
+def _get_model(model_name: str = MODEL):
+    import google.generativeai as genai  # type: ignore
+
+    api_key: Optional[str] = os.getenv("GOOGLE_API_KEY")
+    if api_key:
+        genai.configure(api_key=api_key)
+    return genai.GenerativeModel(model_name)
 
 
 def _extract_system_text(messages: List[Dict[str, Any]]) -> str:
@@ -36,30 +47,9 @@ def _to_gemini_contents(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def generate(messages: List[Dict[str, Any]], model_name: str = MODEL) -> str:
-    """
-    Non-streaming Gemini generation.
-
-    Requires `GOOGLE_API_KEY` in environment (or any mechanism supported by google-generativeai).
-    """
-    try:
-        import google.generativeai as genai  # type: ignore
-    except Exception as e:
-        # Keep API import-time safe. If Gemini deps are broken/missing (e.g. grpc),
-        # fail only when the RAG path is invoked.
-        raise RuntimeError(
-            "Gemini SDK dependencies are not available. "
-            "Fix Python deps (google-generativeai / grpcio) to enable RAG."
-        ) from e
-
-    api_key: Optional[str] = os.getenv("GOOGLE_API_KEY")
-    if api_key:
-        genai.configure(api_key=api_key)
-
     system_instruction = _extract_system_text(messages)
     contents = _to_gemini_contents(messages)
 
-    # google-generativeai==0.3.2 does NOT support `system_instruction=` on GenerativeModel.
-    # To keep Phase 3 prompt shape stable, we fold system text into the first user turn.
     if system_instruction:
         if contents:
             first = contents[0]
@@ -70,7 +60,7 @@ def generate(messages: List[Dict[str, Any]], model_name: str = MODEL) -> str:
         else:
             contents = [{"role": "user", "parts": [{"text": system_instruction}]}]
 
-    model = genai.GenerativeModel(model_name)
+    model = _get_model(model_name)
     response = model.generate_content(contents)
     return getattr(response, "text", "") or ""
 

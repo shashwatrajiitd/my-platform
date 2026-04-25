@@ -8,6 +8,7 @@ import { DeveloperExperience } from './sections/Experience'
 import { DeveloperSkills } from './sections/Skills'
 import { DeveloperEducation } from './sections/Education'
 import { DeveloperAchievements } from './sections/Achievements'
+import { DeveloperProjectWork } from './sections/ProjectWork'
 import { DeveloperContact } from './sections/Contact'
 import { AIFloatingAssistant } from '@/components/shared/AIFloatingAssistant'
 
@@ -22,6 +23,7 @@ export function DeveloperProfile() {
           { label: 'Skills', targetId: 'developer-skills' },
           { label: 'Education', targetId: 'developer-education' },
           { label: 'Achievements', targetId: 'developer-achievements' },
+          { label: 'Projects', targetId: 'developer-projects' },
           { label: 'Hire Me', targetId: 'developer-contact' },
         ]}
       />
@@ -31,6 +33,7 @@ export function DeveloperProfile() {
           <DeveloperAbout />
           <DeveloperContinueWatching />
           <DeveloperExperience />
+          <DeveloperProjectWork />
           <DeveloperSkills />
           <DeveloperEducation />
           <DeveloperAchievements />

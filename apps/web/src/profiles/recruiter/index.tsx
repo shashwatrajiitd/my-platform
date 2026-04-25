@@ -9,6 +9,7 @@ import { RecruiterExperience } from './sections/Experience'
 import { RecruiterCoreSkills } from './sections/CoreSkills'
 import { RecruiterEducation } from './sections/Education'
 import { RecruiterAchievements } from './sections/Achievements'
+import { RecruiterProjectWork } from './sections/ProjectWork'
 import { RecruiterContact } from './sections/Contact'
 import { AIFloatingAssistant } from '@/components/shared/AIFloatingAssistant'
 
@@ -23,6 +24,7 @@ export function RecruiterProfile() {
           { label: 'Skills', targetId: 'recruiter-skills' },
           { label: 'Education', targetId: 'recruiter-education' },
           { label: 'Achievements', targetId: 'recruiter-achievements' },
+          { label: 'Projects', targetId: 'recruiter-projects' },
           { label: 'Hire Me', targetId: 'recruiter-contact' },
         ]}
       />
@@ -63,6 +65,13 @@ export function RecruiterProfile() {
                 chips: ['Scholastic', 'Technical', 'Olympiads'],
               },
               {
+                id: 'projects',
+                title: 'Project Work',
+                targetId: 'recruiter-projects',
+                previewSrc: '/assets/profiles/Recruiter/Continue_watching/Projects.mp4',
+                chips: ['Open Source', 'Full-Stack', 'Systems'],
+              },
+              {
                 id: 'contact',
                 title: 'Contact',
                 targetId: 'recruiter-contact',
@@ -73,6 +82,7 @@ export function RecruiterProfile() {
           />
           <RecruiterHighlights />
           <RecruiterExperience />
+          <RecruiterProjectWork />
           <RecruiterCoreSkills />
           <RecruiterEducation />
           <RecruiterAchievements />

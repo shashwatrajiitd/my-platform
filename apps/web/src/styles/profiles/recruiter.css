@@ -763,7 +763,8 @@ button.btn-primary-cta {
     background: var(--netflix-dark-grey);
 }
 
-.continue-watching.recruiter-continue-watching.core-skills-achievements {
+.continue-watching.recruiter-continue-watching.core-skills-achievements,
+.continue-watching.recruiter-continue-watching.core-skills-projects {
     padding: 0 !important;
 }
 
@@ -1020,6 +1021,22 @@ button.btn-primary-cta {
 
 .hover-preview-expand:hover {
     background: rgba(255, 255, 255, 0.9);
+}
+
+.hover-preview-external-link {
+    text-decoration: none;
+    transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.hover-preview-external-link svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.hover-preview-external-link:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.6);
 }
 
 .hover-preview-expand-icon {
@@ -1620,8 +1637,9 @@ button.btn-primary-cta {
     overflow: visible; /* Allow expanded cards to overflow */
 }
 
-/* Override padding for achievements section */
-#recruiter-achievements {
+/* Override padding for achievements and projects sections */
+#recruiter-achievements,
+#recruiter-projects {
     padding-top: 0px;
     padding-bottom: 0px;
 }
@@ -1650,7 +1668,8 @@ button.btn-primary-cta {
     box-sizing: border-box;
 }
 
-.core-skills-section .continue-watching.core-skills-achievements {
+.core-skills-section .continue-watching.core-skills-achievements,
+.core-skills-section .continue-watching.core-skills-projects {
     padding: 0 !important;
     margin: 0 !important;
     background: transparent;

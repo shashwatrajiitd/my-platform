@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import os
 from typing import Literal
 
@@ -14,6 +15,7 @@ def _get_persist_dir() -> str:
     return os.getenv("CHROMA_PERSIST_DIR", "./chroma")
 
 
+@functools.lru_cache(maxsize=1)
 def get_client():
     """
     Chroma persistent client (file-backed).
@@ -54,6 +56,7 @@ def get_client():
     )
 
 
+@functools.lru_cache(maxsize=4)
 def get_collection(profile: str):
     """
     Profile-aware collections for hard isolation.
@@ -99,8 +102,8 @@ def recreate_collection(profile: str):
     try:
         client.delete_collection(name=name)
     except Exception:
-        # Best-effort: if it doesn't exist or delete isn't supported, continue.
         pass
 
+    get_collection.cache_clear()
     return client.get_or_create_collection(name=name, metadata={"embedding_model": EMBEDDING_MODEL})
 

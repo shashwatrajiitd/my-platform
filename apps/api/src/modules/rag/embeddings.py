@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import os
 import socket
 import time
@@ -55,6 +56,7 @@ def _extract_embedding(obj) -> List[float] | None:
     return None
 
 
+@functools.lru_cache(maxsize=1)
 def _configure_genai():
     """
     Lazy configure to avoid import-time side effects.

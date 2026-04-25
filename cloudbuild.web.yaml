@@ -5,7 +5,8 @@ substitutions:
   _REGION: "asia-south1"
   _REPO: "portfolio"
   _SERVICE: "portfolio-web"
-  _NEXT_PUBLIC_API_URL: "https://portfolio-api-qtsas2ligq-el.a.run.app"
+  _NEXT_PUBLIC_API_URL: "https://portfolio-api-ybimxa6pvq-el.a.run.app"
+  _TAG: "latest"
 
 steps:
   - name: "gcr.io/cloud-builders/docker"
@@ -18,12 +19,12 @@ steps:
         "--build-arg",
         "NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}",
         "-t",
-        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}",
         ".",
       ]
 
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA"]
+    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}"]
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
     entrypoint: "gcloud"
@@ -33,7 +34,7 @@ steps:
         "deploy",
         "${_SERVICE}",
         "--image",
-        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$SHORT_SHA",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}",
         "--region",
         "${_REGION}",
         "--platform",

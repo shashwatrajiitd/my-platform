@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import math
 from typing import Any, Dict, List
 
@@ -16,14 +17,13 @@ MAX_TOP_K = 10
 MIN_RELEVANCE_SCORE = 0.15
 
 
+@functools.lru_cache(maxsize=256)
+def _embed_query_cached(query: str) -> tuple:
+    return tuple(embed_texts([query])[0])
+
+
 def embed_query(query: str) -> list[float]:
-    """
-    Convert a user query into an embedding vector.
-
-    Isolated for easy mocking in tests and future query expansion.
-    """
-
-    return embed_texts([query])[0]
+    return list(_embed_query_cached(query))
 
 
 def query_collection(profile: str, query_embedding: list[float], top_k: int) -> Dict[str, Any]:
