@@ -1977,3 +1977,35 @@ button.btn-primary-cta {
         font-size: 0.9rem;
     }
 }
+
+/* Project Work Section */
+.core-skills-section {
+    padding: 1.5rem 4%;
+    background: var(--netflix-black);
+    position: relative;
+    overflow: visible;
+}
+
+#developer-projects {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.core-skills-section .continue-watching.core-skills-projects {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.continue-watching.recruiter-continue-watching.core-skills-projects {
+    padding: 0 !important;
+}
+
+.core-skills-section .section-title {
+    text-align: left;
+    margin-bottom: 0.75rem;
+    font-size: 2.2rem;
+    font-weight: 700;
+}

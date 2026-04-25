@@ -778,8 +778,9 @@ button.btn-primary-cta {
     padding: 0 !important;
 }
 
-/* Recruiter Achievements row (remove outer padding to align flush) */
-.continue-watching.recruiter-continue-watching.core-skills-achievements {
+/* Recruiter Achievements/Projects rows (remove outer padding to align flush) */
+.continue-watching.recruiter-continue-watching.core-skills-achievements,
+.continue-watching.recruiter-continue-watching.core-skills-projects {
     padding: 0 !important;
 }
 
